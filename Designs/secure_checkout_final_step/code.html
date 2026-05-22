@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout | O'Circle Beauty</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#414943",
+                        "on-background": "#1a1c1b",
+                        "outline": "#717973",
+                        "inverse-on-surface": "#f1f1ef",
+                        "surface-container": "#eeeeec",
+                        "secondary-fixed": "#e4e2dd",
+                        "surface-container-high": "#e8e8e6",
+                        "primary-fixed": "#bceecf",
+                        "on-surface": "#1a1c1b",
+                        "on-primary-fixed-variant": "#224f39",
+                        "surface-tint": "#3a674f",
+                        "surface-bright": "#f9f9f7",
+                        "secondary-container": "#e1dfdb",
+                        "primary": "#14422d",
+                        "on-primary-fixed": "#002112",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9f7",
+                        "outline-variant": "#c0c9c1",
+                        "on-tertiary-fixed-variant": "#49473f",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2f3130",
+                        "secondary": "#5e5e5b",
+                        "on-secondary-fixed": "#1b1c19",
+                        "tertiary-fixed-dim": "#cbc6bc",
+                        "primary-fixed-dim": "#a1d1b4",
+                        "surface-dim": "#dadad8",
+                        "on-tertiary-fixed": "#1d1c16",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#474744",
+                        "on-tertiary-container": "#c9c4ba",
+                        "primary-container": "#2d5a43",
+                        "tertiary": "#3c3a33",
+                        "surface-container-low": "#f4f4f1",
+                        "inverse-primary": "#a1d1b4",
+                        "secondary-fixed-dim": "#c8c6c2",
+                        "tertiary-fixed": "#e7e2d8",
+                        "on-secondary-container": "#63635f",
+                        "on-primary-container": "#9fcfb2",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#54514a",
+                        "surface": "#f9f9f7",
+                        "surface-variant": "#e2e3e0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "section-gap-sm": "64px",
+                        "section-gap-lg": "120px",
+                        "container-margin-mobile": "24px",
+                        "gutter": "16px",
+                        "container-margin-desktop": "80px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Bodoni Moda"],
+                        "headline-lg": ["Bodoni Moda"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "display-lg": ["Bodoni Moda"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Bodoni Moda"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active { color: #14422d; border-bottom: 2px solid #14422d; }
+        .step-inactive { color: #5e5e5b; border-bottom: 2px solid transparent; }
+        input:focus { outline: none; border-bottom-color: #14422d !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-container flex justify-between items-center w-full px-container-margin-mobile md:px-container-margin-desktop h-16 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity">menu</button>
+<h1 class="font-display-lg text-headline-md tracking-tighter text-primary dark:text-inverse-primary">O'Circle Beauty</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="hidden md:block font-label-md text-primary uppercase tracking-widest cursor-pointer hover:opacity-80 transition-opacity">Help</span>
+<button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity">shopping_bag</button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin-mobile md:px-container-margin-desktop py-12">
+<div class="flex flex-col lg:flex-row gap-16">
+<!-- Left Side: Multi-step Form -->
+<div class="flex-1 space-y-12">
+<nav class="flex gap-8 border-b border-outline-variant mb-12">
+<button class="pb-4 font-label-md uppercase tracking-widest step-active transition-all duration-200">1. Shipping</button>
+<button class="pb-4 font-label-md uppercase tracking-widest step-inactive transition-all duration-200">2. Delivery</button>
+<button class="pb-4 font-label-md uppercase tracking-widest step-inactive transition-all duration-200">3. Payment</button>
+</nav>
+<!-- Section: Shipping Information -->
+<section class="space-y-8 animate-in fade-in duration-500" id="shipping-section">
+<h2 class="font-headline-lg text-headline-lg text-primary">Shipping Information</h2>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
+<div class="md:col-span-2 relative">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="Email Address" type="email"/>
+</div>
+<div class="relative">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="First Name" type="text"/>
+</div>
+<div class="relative">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="Last Name" type="text"/>
+</div>
+<div class="md:col-span-2 relative">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="Address" type="text"/>
+</div>
+<div class="relative">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="City" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="State" type="text"/>
+<input class="w-full bg-transparent border-b border-outline-variant py-2 font-body-md focus:border-primary transition-colors placeholder:text-secondary/50" placeholder="Zip Code" type="text"/>
+</div>
+<div class="md:col-span-2 flex items-center gap-3">
+<input class="w-4 h-4 text-primary border-outline-variant rounded focus:ring-primary" id="save-info" type="checkbox"/>
+<label class="text-secondary font-label-sm uppercase tracking-wide" for="save-info">Save this information for next time</label>
+</div>
+<div class="md:col-span-2 pt-8">
+<button class="w-full md:w-auto px-12 py-4 bg-primary text-on-primary font-label-md uppercase tracking-[0.2em] hover:opacity-90 transition-all transform active:scale-95 shadow-sm" type="button">
+                                Continue to Delivery
+                            </button>
+</div>
+</form>
+</section>
+<!-- Section: Delivery Method (Collapsed View Example) -->
+<section class="opacity-50 pointer-events-none border-t border-outline-variant pt-8">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-secondary">Delivery Method</h2>
+<span class="material-symbols-outlined text-secondary">lock</span>
+</div>
+</section>
+<!-- Section: Payment (Collapsed View Example) -->
+<section class="opacity-50 pointer-events-none border-t border-outline-variant pt-8">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-secondary">Payment</h2>
+<span class="material-symbols-outlined text-secondary">lock</span>
+</div>
+</section>
+</div>
+<!-- Right Side: Order Summary -->
+<aside class="w-full lg:w-[400px]">
+<div class="lg:sticky lg:top-28 bg-surface-container-low rounded-xl p-8 space-y-8 border border-outline-variant/30">
+<h3 class="font-headline-md text-headline-md text-primary pb-4 border-b border-outline-variant">Order Summary</h3>
+<div class="space-y-6 max-h-[400px] overflow-y-auto no-scrollbar">
+<!-- Product Item 1 -->
+<div class="flex gap-4">
+<div class="w-20 h-24 bg-secondary-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A minimalist studio product shot of a premium glass skincare bottle against a warm neutral linen background. The lighting is soft and ethereal, emphasizing the clean lines and organic feel of the O'Circle Beauty brand. Subtle shadows dance on the stone surface, creating a sense of luxury and clinical purity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_KaI5DhLr4Ljt1g1CtvsDvtllCK58uaOrCjpE4xRuOZVij5fvSY14vF8ETASQjv97Ge_JLqKe4m9TVlgTBydaN_K5gAQ-8Qs2F95C07aIfhHTZML-rMdJYqFV69PDVnERvzydznML4auIEybWs4Z0iRklb12CuPxOVJEPObeVWYoba0hvGlAt_0P5z0QdeT6JN33jRdGogkCOs3i590_NbUeKD5-6GtgixFd8ghhRSLPGwI3e0z8mfFzyRXCnrzPSFG2lQb01n5E"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h4 class="font-label-md text-primary">Botanical Serum No. 4</h4>
+<p class="text-label-sm text-secondary">30ml / Refillable</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-label-sm text-secondary">Qty: 1</span>
+<span class="font-body-md text-primary">$84.00</span>
+</div>
+</div>
+</div>
+<!-- Product Item 2 -->
+<div class="flex gap-4">
+<div class="w-20 h-24 bg-secondary-container rounded overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-end editorial close-up of an organic facial cream in a frosted green glass jar. The cream is smooth and pearlescent, reflecting natural soft-box lighting. Set against a minimalist backdrop of dried botanical leaves and soft linen textures, evoking a serene and clinical luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkoSkPKOeKiKHQOuVfrlnwy3NeTJnQuUpROzwaOwuAgv3Cima6MPmahcNdntrjjA5CJY3ChIH_U9aOYsD-fJhGJoJIkY6-Ls7ReyXdRUm1npyziTaL3BhREylYJ21QsF_sOhirEXbW3PelpvX1CjnGOYC9g0gk9TZDvcik6GgtVMXxXj-57lm47kA2diAVpBuGwH3ouTZtB4ZP9zk6y4h68DOHfmaN_FSuC_pulscggXmYXqru-IUGV2civG5ZWkK0zv6Ycu662TM"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h4 class="font-label-md text-primary">Cloud Hydration Mask</h4>
+<p class="text-label-sm text-secondary">50ml / Recyclable</p>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-label-sm text-secondary">Qty: 1</span>
+<span class="font-body-md text-primary">$62.00</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant space-y-3">
+<div class="flex justify-between text-body-md">
+<span class="text-secondary">Subtotal</span>
+<span class="text-primary">$146.00</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary">Shipping</span>
+<span class="text-primary italic">Calculated at next step</span>
+</div>
+<div class="flex justify-between text-body-md">
+<span class="text-secondary">Estimated Tax</span>
+<span class="text-primary">$12.41</span>
+</div>
+<div class="flex justify-between pt-6 mt-4 border-t border-outline-variant">
+<span class="font-headline-md text-primary">Total</span>
+<span class="font-headline-md text-primary text-2xl">$158.41</span>
+</div>
+</div>
+<div class="pt-4">
+<div class="bg-primary/5 p-4 rounded-lg flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5">eco</span>
+<p class="text-label-sm text-primary-container leading-relaxed">
+                                Your order qualifies for <span class="font-bold">Carbon Neutral Delivery</span>. We plant one tree for every purchase made today.
+                            </p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface shadow-[0_-4px_20px_rgba(20,66,45,0.05)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider mt-1">Shop</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider mt-1">Search</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary font-bold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_bag</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider mt-1">Cart</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider mt-1">Account</span>
+</button>
+</nav>
+<footer class="mt-section-gap-lg py-12 px-container-margin-mobile md:px-container-margin-desktop border-t border-outline-variant bg-surface-container-low">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<p class="font-label-sm text-secondary uppercase tracking-[0.2em]">© 2024 O'Circle Beauty. All Rights Reserved.</p>
+<div class="flex gap-8">
+<a class="font-label-sm text-secondary uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="font-label-sm text-secondary uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Terms</a>
+<a class="font-label-sm text-secondary uppercase tracking-[0.2em] hover:text-primary transition-colors" href="#">Shipping Policy</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for input fields
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+    </script>
+</body></html>

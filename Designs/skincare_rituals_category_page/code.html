@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skincare | O'Circle Beauty</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400..900;1,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#2d5a43",
+                    "on-primary-container": "#9fcfb2",
+                    "primary": "#14422d",
+                    "on-secondary-container": "#63635f",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#1a1c1b",
+                    "outline": "#717973",
+                    "error": "#ba1a1a",
+                    "surface": "#f9f9f7",
+                    "secondary-fixed": "#e4e2dd",
+                    "surface-container-high": "#e8e8e6",
+                    "secondary-fixed-dim": "#c8c6c2",
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#1b1c19",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#cbc6bc",
+                    "on-tertiary-container": "#c9c4ba",
+                    "surface-variant": "#e2e3e0",
+                    "inverse-surface": "#2f3130",
+                    "surface-container": "#eeeeec",
+                    "secondary-container": "#e1dfdb",
+                    "on-primary": "#ffffff",
+                    "background": "#f9f9f7",
+                    "on-tertiary-fixed": "#1d1c16",
+                    "on-error": "#ffffff",
+                    "secondary": "#5e5e5b",
+                    "outline-variant": "#c0c9c1",
+                    "on-tertiary-fixed-variant": "#49473f",
+                    "primary-fixed-dim": "#a1d1b4",
+                    "surface-bright": "#f9f9f7",
+                    "surface-dim": "#dadad8",
+                    "surface-container-highest": "#e2e3e0",
+                    "on-secondary-fixed-variant": "#474744",
+                    "on-primary-fixed": "#002112",
+                    "tertiary-fixed": "#e7e2d8",
+                    "on-primary-fixed-variant": "#224f39",
+                    "surface-container-low": "#f4f4f1",
+                    "on-surface-variant": "#414943",
+                    "tertiary-container": "#54514a",
+                    "on-background": "#1a1c1b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap-sm": "64px",
+                    "container-margin-desktop": "80px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-margin-mobile": "24px",
+                    "section-gap-lg": "120px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Bodoni Moda"],
+                    "headline-md": ["Bodoni Moda"],
+                    "headline-lg-mobile": ["Bodoni Moda"],
+                    "headline-lg": ["Bodoni Moda"],
+                    "label-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .linen-glow {
+            box-shadow: 0 10px 40px -10px rgba(20, 66, 45, 0.05);
+        }
+        .filter-transition {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-on-primary-container selection:text-primary">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-50 bg-surface dark:bg-on-background">
+<nav class="flex justify-between items-center w-full px-container-margin-mobile md:px-container-margin-desktop py-base max-w-7xl mx-auto">
+<div class="flex items-center gap-gutter">
+<img alt="O'Circle Beauty Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWCccrMXbzLl65IbU1o_vZO65XYY6DV4F4u5kZnS7XUgP26LN-MOHHCmmTAXMKCayK_uJlptCJhTvpSCCcTGqQEAqzgZof3WNfHzGHrFQvuFhE2tF2ddmfLZ1aUTMY_bI24w1GT_jpQBgFQA9DyO_it5M1CJVMCRiuZhsKr_c2JSR9kkPNH56Tcc3ENZPAQzczF4sayYIbbR1-jxmZECyNNcpttgVFjIIc1LIOBqEsTFe4-TpDNF0lDocjhKmMhJsnwdGM_tvT7Xk"/>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-label-md text-primary dark:text-primary-fixed-dim border-b border-primary dark:border-primary-fixed-dim pb-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200" href="#">Shop</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200" href="#">About</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200" href="#">Sustainability</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors duration-200" href="#">Rituals</a>
+</div>
+<div class="flex items-center gap-6 text-primary">
+<button class="material-symbols-outlined hover:opacity-80 transition-opacity">search</button>
+<button class="material-symbols-outlined hover:opacity-80 transition-opacity">shopping_bag</button>
+<button class="material-symbols-outlined hover:opacity-80 transition-opacity">person</button>
+</div>
+</nav>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin-mobile md:px-container-margin-desktop py-gutter">
+<!-- Category Header -->
+<div class="mb-section-gap-sm">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">Essential Skincare</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">Discover a curated collection of high-performance botanical formulas designed to harmonize with your skin's natural rhythm.</p>
+</div>
+<div class="flex flex-col md:flex-row gap-section-gap-sm">
+<!-- Filter Sidebar -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="sticky top-24 space-y-8">
+<div>
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Skin Type</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-outline text-primary focus:ring-primary rounded-sm" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Oily &amp; Acne-Prone</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-outline text-primary focus:ring-primary rounded-sm" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Dry &amp; Dehydrated</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 border-outline text-primary focus:ring-primary rounded-sm" type="checkbox"/>
+<span class="font-body-md text-primary transition-colors">Sensitive / Reactive</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-outline text-primary focus:ring-primary rounded-sm" type="checkbox"/>
+<span class="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Normal / Combination</span>
+</label>
+</div>
+</div>
+<div class="pt-4 border-t border-secondary-fixed">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Concern</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full cursor-pointer hover:bg-outline-variant transition-colors">Hydration</span>
+<span class="px-3 py-1 bg-primary text-white font-label-sm text-label-sm rounded-full cursor-pointer">Anti-Aging</span>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full cursor-pointer hover:bg-outline-variant transition-colors">Brightening</span>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full cursor-pointer hover:bg-outline-variant transition-colors">Calming</span>
+</div>
+</div>
+<div class="pt-4 border-t border-secondary-fixed">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4">Ingredients</h3>
+<ul class="space-y-3">
+<li class="font-body-md text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Bakuchiol</li>
+<li class="font-body-md text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Hyaluronic Acid</li>
+<li class="font-body-md text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Niacinamide</li>
+<li class="font-body-md text-on-surface-variant hover:text-primary cursor-pointer transition-colors">Squalane</li>
+</ul>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-grow">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8">
+<!-- Product 1 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden mb-4 bg-surface-container-low aspect-[4/5] flex items-center justify-center p-8">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="A minimalist product photography shot of a sleek glass serum bottle with a green botanical leaf inside. The lighting is soft and high-key, casting gentle shadows against a warm linen background. The overall aesthetic is one of clean luxury and clinical purity, reflecting the O'Circle brand's organic yet precise identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE1KQWzr9pby-TEsIkUMNK_bIptPud_46S57xgET03Mh_4dDt7pxEY5-hh5PCvLw6Wb54sNfjPSaVDDOH8MiJX5ctdUGL_V_3gjVlDxhRNuz63NcUotNfxcw3FOGJFgyBUNoB-WrXv4B7qGh5sTxMzE02l_G0oAmDmtM48jYGv0KmGSJ8SLI3Tcd3WRy8aI4jmzSqzCDD37G-UyN9u6n-RpFi_ogJHdaKmpk98xIsElWmtZc3X4TKdgaa3mWyhzc0j35rTqDhG008"/>
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300"></div>
+<button class="absolute bottom-4 left-4 right-4 bg-primary text-white py-3 font-label-md text-label-md uppercase opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                Quick Add
+                            </button>
+</div>
+<p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Serum</p>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Emerald Resilience Elixir</h3>
+<p class="font-body-md text-on-surface">$82.00</p>
+</div>
+<!-- Ritual Tip (Asymmetric Layout Insertion) -->
+<div class="bg-primary p-8 flex flex-col justify-center items-center text-center text-white sm:col-span-1 lg:col-span-1 linen-glow">
+<span class="material-symbols-outlined text-4xl mb-4">relax</span>
+<h4 class="font-headline-md text-headline-md mb-2">Ritual Tip</h4>
+<p class="font-body-md italic opacity-90">"Warm 3 drops between your palms and press firmly into the skin. Inhale the botanical essence for 10 seconds to ground your morning."</p>
+<div class="mt-6 w-12 h-0.5 bg-on-primary-container"></div>
+</div>
+<!-- Product 2 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden mb-4 bg-surface-container-low aspect-[4/5] flex items-center justify-center p-8">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="High-end skincare product jar featuring a white minimalist design with deep green typography. It sits on a textured stone surface with soft ambient lighting and organic shadows. The shot evokes a feeling of high-end clinical efficacy mixed with natural tranquility, consistent with O'Circle Beauty's premium branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8LgVh8my6YP_agn8PunUur5Yx4RHF_e31dJ_9lM9pDbkrRt5tkCpKhrFHs4-72YI7bPuEvSipZKfneGyV2bW_CgP0CWrnIQbppFtJZJkPA__U4VtOHKnjzWXzjhNDAUYWLabSTcsKSEJTtYu9b2X8lbS2jJPMANmH5d7s2C8PPujL7nqEgdnZVcGt5Wrv7QKMXKpbn3ToyzcYPKFUdLna4KWN-AShZt4wQq7mi7XfjBKm-U8QsoxPqLs6DoV9L5b7ItFyDAcEZYw"/>
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300"></div>
+<button class="absolute bottom-4 left-4 right-4 bg-primary text-white py-3 font-label-md text-label-md uppercase opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                Quick Add
+                            </button>
+</div>
+<p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Moisturizer</p>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Stone &amp; Silk Hydrator</h3>
+<p class="font-body-md text-on-surface">$64.00</p>
+</div>
+<!-- Product 3 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden mb-4 bg-surface-container-low aspect-[4/5] flex items-center justify-center p-8">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="Detailed product shot of a facial oil in a transparent glass bottle with a minimalist label. The bottle is surrounded by real botanicals like dry herbs and fresh green leaves, illuminated by natural afternoon sunlight through a window. The mood is calm, restorative, and sophisticated, emphasizing the botanical purity of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6mypVBGsEZHDC4vuGtVBMKEwWNjxX8PAvRPt-xQsO3KNITxqouoHacnPsnXBfJiL6ZdlgNmdEeTiBPEs_Trc5-2MOloHsmk1hnh8JhrVKiNNbCuapYeJah-bFdpQBAbE35Fg9M0rF22xARFK6fT4uVeLxJ9poIA7zVSEf9HwP0X1S-czwXzxHIkgrzppk7YYFUwZwDiHde3E-7juQfRtkWCxre8uIGtMSv3ceAdy_RR4DQ0XuExZvHr12kbUt_blHjloaObzOO7U"/>
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300"></div>
+<button class="absolute bottom-4 left-4 right-4 bg-primary text-white py-3 font-label-md text-label-md uppercase opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                Quick Add
+                            </button>
+</div>
+<p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Cleanser</p>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Linen Milk Wash</h3>
+<p class="font-body-md text-on-surface">$48.00</p>
+</div>
+<!-- Bento Grid / Educational Highlight -->
+<div class="lg:col-span-2 bg-surface-container-low p-10 flex flex-col md:flex-row items-center gap-8 rounded-lg">
+<div class="md:w-1/2">
+<h2 class="font-display-lg text-headline-lg text-primary mb-4">The Squalane Science</h2>
+<p class="font-body-md text-on-surface-variant mb-6">Our plant-derived Squalane mimics your skin's natural oils to provide weightless hydration without clogging pores. A cornerstone of the O'Circle ritual.</p>
+<a class="inline-flex items-center gap-2 font-label-md text-label-md text-primary hover:gap-4 transition-all" href="#">
+                                Read the Journal <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="md:w-1/2 aspect-square relative">
+<img class="w-full h-full object-cover rounded-lg" data-alt="Abstract macro photography of clear viscous liquid droplets merging together on a soft green background. The lighting creates a prismatic effect, highlighting the purity and clinical refinement of the skincare ingredients. The shot is high-concept and editorial, aligning with a premium beauty brand's focus on transparency and quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuATMsekFFhv0NVBVzHy5ugILO6WXlkumGDyLbi-_gV1DR7roVZkT9FlkPMSnkP7MjK4qX2zeumo2zbzX5_-w3uHu5pif7_Koyasx8FfcXeUmObh2ZjBbff0ryr_LlKJdhnDj5xwgn-V_2QmF0TaEktvipu8lvGgpax-ly6AqSukF9bnf6PbHHLFD5RN9M1JeW8nde_FyyfLTbCNjuZPSWUS7PaHXhp2GPV6lVuzMvi5pOctNvEoqLcIrQiyOzmcQDbeD_DIrBtymcc"/>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="group cursor-pointer">
+<div class="relative overflow-hidden mb-4 bg-surface-container-low aspect-[4/5] flex items-center justify-center p-8">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="Minimalist skincare tube on a bed of fresh moss and smooth river stones. The lighting is soft-box style, professional and bright, emphasizing a light-mode aesthetic. The product packaging is sleek with deep green O'Circle branding, projecting an image of botanical luxury and high-end organic skincare performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDekEnKLk_pClqXLQaePzNGKmhvZXQdoZTZ5bPbB-aafYqqc81yD9nnvmEgs7Rn5jq2nuEgd5SEiJyHOMLG2y6741wQ1B9eV3eFSRjzKmzPd43aCTQ5jG58s6lOlqzuHt2l1JvijSvwb-VRb3WjwE09HRWePEh5ymUUc5_v1PiVyHobzjZZFR1Mwy2jdDEjx_cUZ4PM1sArxkDnDARxTfp8QwxcXDXHsVSbIuk1g3odyiYcVrhUMKlvIRJLx4-3vQajYydjwxY_SeM"/>
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300"></div>
+<button class="absolute bottom-4 left-4 right-4 bg-primary text-white py-3 font-label-md text-label-md uppercase opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                Quick Add
+                            </button>
+</div>
+<p class="font-label-sm text-label-sm text-secondary uppercase mb-1">Mask</p>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Chlorophyll Infusion</h3>
+<p class="font-body-md text-on-surface">$56.00</p>
+</div>
+</div>
+<!-- Load More / Pagination -->
+<div class="mt-section-gap-sm flex justify-center">
+<button class="px-12 py-4 border border-outline text-primary font-label-md text-label-md uppercase hover:bg-primary hover:text-white transition-all duration-300">
+                        Explore More Rituals
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-section-gap-lg bg-surface-container-low dark:bg-inverse-surface">
+<div class="flex flex-col md:flex-row justify-between items-start w-full px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm max-w-7xl mx-auto gap-gutter">
+<div class="flex flex-col gap-6 max-w-xs">
+<img alt="O'Circle Beauty Logo" class="h-10 w-fit object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWCccrMXbzLl65IbU1o_vZO65XYY6DV4F4u5kZnS7XUgP26LN-MOHHCmmTAXMKCayK_uJlptCJhTvpSCCcTGqQEAqzgZof3WNfHzGHrFQvuFhE2tF2ddmfLZ1aUTMY_bI24w1GT_jpQBgFQA9DyO_it5M1CJVMCRiuZhsKr_c2JSR9kkPNH56Tcc3ENZPAQzczF4sayYIbbR1-jxmZECyNNcpttgVFjIIc1LIOBqEsTFe4-TpDNF0lDocjhKmMhJsnwdGM_tvT7Xk"/>
+<p class="font-body-md text-on-surface-variant">Elevating the everyday skincare ritual through the intersection of clinical precision and botanical serenity.</p>
+<div class="flex gap-4">
+<a class="text-primary hover:opacity-70 transition-opacity" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-primary hover:opacity-70 transition-opacity" href="#"><span class="material-symbols-outlined">star</span></a>
+<a class="text-primary hover:opacity-70 transition-opacity" href="#"><span class="material-symbols-outlined">camera</span></a>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md text-label-md text-primary uppercase">Shop</h5>
+<ul class="flex flex-col gap-2">
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Face Care</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Body Care</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Gifts &amp; Kits</a></li>
+</ul>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="font-label-md text-label-md text-primary uppercase">Support</h5>
+<ul class="flex flex-col gap-2">
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Shipping</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Returns</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="flex flex-col gap-4 col-span-2 md:col-span-1">
+<h5 class="font-label-md text-label-md text-primary uppercase">Join the Circle</h5>
+<div class="flex border-b border-outline py-2">
+<input class="bg-transparent border-none focus:ring-0 w-full placeholder:text-outline-variant font-body-md" placeholder="Your Email" type="email"/>
+<button class="material-symbols-outlined text-primary">arrow_forward</button>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full border-t border-secondary-fixed mt-8">
+<div class="max-w-7xl mx-auto px-container-margin-mobile md:px-container-margin-desktop py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 O'Circle Beauty. Consciously Crafted.</p>
+<div class="flex gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for smooth scrolling and hover effects
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add to cart interaction mock
+        const addToCartBtns = document.querySelectorAll('button');
+        addToCartBtns.forEach(btn => {
+            if(btn.innerText === 'QUICK ADD') {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const originalText = btn.innerText;
+                    btn.innerText = 'ADDED';
+                    btn.classList.add('bg-on-primary-container', 'text-primary');
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.classList.remove('bg-on-primary-container', 'text-primary');
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body></html>
