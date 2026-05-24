@@ -41,7 +41,7 @@ export default function RootLayout({
       </head>
       <body className="bg-background text-on-background font-body text-body-md antialiased">
         <Header />
-        <main className="pt-16 pb-24 md:pb-0 min-h-screen">{children}</main>
+        <main className="pt-[100px] pb-24 md:pb-0 min-h-screen">{children}</main>
         <Footer />
         <MobileBottomNav />
       </body>

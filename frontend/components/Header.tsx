@@ -24,12 +24,18 @@ export default function Header() {
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 h-16 flex justify-between items-center px-container-margin-mobile md:px-container-margin-desktop ${
-          scrolled ? "scrolled-header" : "bg-background"
-        }`}
-        id="main-header"
-      >
+      <div className="fixed top-0 left-0 w-full z-50">
+        <div className="bg-primary text-on-primary h-9 flex items-center justify-center overflow-hidden">
+          <p className="font-body text-label-sm uppercase tracking-widest text-center px-4 truncate">
+            ✦ Free shipping over $40 · 100% Authentic K-Beauty · Extra 10% off with code CIRCLE10 ✦
+          </p>
+        </div>
+        <header
+          className={`transition-all duration-300 h-16 flex justify-between items-center px-container-margin-mobile md:px-container-margin-desktop ${
+            scrolled ? "scrolled-header" : "bg-background"
+          }`}
+          id="main-header"
+        >
         <div className="flex items-center gap-6 flex-1">
           <button
             aria-label="Open menu"
@@ -79,8 +85,9 @@ export default function Header() {
               2
             </span>
           </Link>
-        </div>
-      </header>
+          </div>
+        </header>
+      </div>
 
       {/* Mobile slide-over menu */}
       <div

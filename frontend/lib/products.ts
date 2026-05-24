@@ -34,9 +34,62 @@ export type Product = {
   stats?: Stat[];
   concerns: string[];
   bestSeller?: boolean;
+  isNew?: boolean;
+  trending?: boolean;
 };
 
-export const products: Product[] = [
+const variants: Product["placeholderVariant"][] = ["linen", "green", "stone", "dark"];
+
+const categoryImages: Record<string, string[]> = {
+  "Toner Pads": ["/products/cat-toner-pads.jpg"],
+  "Sheet Masks": ["/products/cat-sheet-masks.jpg"],
+  Serums: ["/products/cat-serums.jpg", "/products/cat-serums-2.jpg"],
+  Essences: ["/products/cat-essences.jpg"],
+  Toners: ["/products/cat-toners.jpg"],
+  Cleansers: ["/products/cat-cleansers.jpg"],
+  Moisturizers: ["/products/cat-moisturizers.jpg", "/products/cat-moisturizers-2.jpg"],
+  Suncare: ["/products/cat-suncare.jpg"],
+  "Eye Care": ["/products/cat-eye-care.jpg"],
+  "Lip Care": ["/products/cat-lip-care.jpg"],
+  Exfoliators: ["/products/cat-exfoliators.jpg"],
+  Body: ["/products/cat-body.jpg"],
+};
+
+type MkInput = Partial<Product> &
+  Pick<Product, "slug" | "name" | "category" | "price">;
+
+let mkIndex = 0;
+function mk(p: MkInput): Product {
+  const idx = mkIndex++;
+  const variant = p.placeholderVariant ?? variants[idx % variants.length];
+  const imgs = categoryImages[p.category] ?? [];
+  const image = p.image ?? (imgs.length ? imgs[idx % imgs.length] : undefined);
+  return {
+    image,
+    tagline: p.tagline ?? p.category,
+    collection: p.collection ?? "Daily Ritual",
+    placeholderIcon: p.placeholderIcon ?? "spa",
+    rating: p.rating ?? 4.6,
+    reviewCount: p.reviewCount ?? 120 + ((mkIndex * 47) % 400),
+    size: p.size ?? "Standard size",
+    shortDesc: p.shortDesc ?? `${p.name} — clean, effective Korean skincare for your daily ritual.`,
+    description:
+      p.description ??
+      `${p.name} is a gentle yet effective addition to your routine, formulated with skin-loving Korean botanicals and made in Korea with strict quality control.`,
+    ritual: p.ritual ?? "Apply to clean skin as part of your daily routine, morning and/or night.",
+    ingredients: p.ingredients ?? "Centella Asiatica, Sodium Hyaluronate, Panthenol, Green Tea Extract, Glycerin.",
+    keyIngredients:
+      p.keyIngredients ?? [
+        { name: "Centella Asiatica", role: "Soothing", desc: "Calms and conditions sensitive, reactive skin.", icon: "eco" },
+        { name: "Hyaluronic Acid", role: "Hydration", desc: "Multi-weight hydration that plumps and smooths.", icon: "water_drop" },
+      ],
+    concerns: p.concerns ?? ["Hydration"],
+    ...p,
+    placeholderVariant: variant,
+  } as Product;
+}
+
+const realProducts: Product[] = [
   {
     slug: "mild-peeling-toner-pad",
     name: "Mild Peeling & Toner Pad",
@@ -89,6 +142,7 @@ export const products: Product[] = [
     ],
     concerns: ["Texture", "Dullness", "Sensitivity", "Pores"],
     bestSeller: true,
+    trending: true,
   },
   {
     slug: "daily-moist-soothing-mask-cica",
@@ -142,156 +196,77 @@ export const products: Product[] = [
     ],
     concerns: ["Sensitivity", "Dryness", "Redness", "Dullness"],
     bestSeller: true,
-  },
-  {
-    slug: "glass-skin-glow-serum",
-    name: "Glass Skin Glow Serum",
-    tagline: "Niacinamide + Rice Ferment",
-    category: "Serums",
-    collection: "Daily Ritual",
-    price: 36,
-    placeholderVariant: "stone",
-    placeholderIcon: "opacity",
-    rating: 4.7,
-    reviewCount: 642,
-    size: "30ml",
-    shortDesc: "A weightless brightening serum for that signature dewy K-beauty glass-skin finish.",
-    description:
-      "A featherlight serum powered by 5% niacinamide and fermented rice water to visibly brighten, even tone and refine texture for translucent, lit-from-within skin.",
-    ritual: "Apply 3–4 drops to clean skin morning and night before moisturizer.",
-    ingredients:
-      "Niacinamide 5%, Rice (Oryza Sativa) Ferment Filtrate, Sodium Hyaluronate, Panthenol, Centella Asiatica.",
-    keyIngredients: [
-      { name: "Niacinamide 5%", role: "Brightening", desc: "Visibly evens tone and fades the look of dark spots.", icon: "wb_sunny" },
-      { name: "Rice Ferment", role: "Radiance", desc: "Antioxidant-rich ferment for a luminous, healthy glow.", icon: "grain" },
-    ],
-    concerns: ["Dullness", "Uneven Tone", "Texture"],
-  },
-  {
-    slug: "ocean-mist-gel-cleanser",
-    name: "Ocean Mist Gel Cleanser",
-    tagline: "Low-pH Daily Cleanser",
-    category: "Cleansers",
-    collection: "Daily Ritual",
-    price: 22,
-    placeholderVariant: "green",
-    placeholderIcon: "water_drop",
-    rating: 4.6,
-    reviewCount: 389,
-    size: "150ml",
-    shortDesc: "A low-pH gel cleanser that melts away impurities without stripping the barrier.",
-    description:
-      "A refreshing low-pH gel-to-foam cleanser with deep-sea minerals and green tea that thoroughly cleanses while keeping the moisture barrier intact.",
-    ritual: "Massage onto damp skin morning and night, then rinse with lukewarm water.",
-    ingredients: "Deep Sea Water, Green Tea Extract, Coco-Glucoside, Glycerin, Panthenol.",
-    keyIngredients: [
-      { name: "Deep Sea Water", role: "Mineral Cleanse", desc: "Mineral-rich water gently lifts away impurities.", icon: "waves" },
-      { name: "Green Tea", role: "Antioxidant", desc: "Soothes and protects against daily stressors.", icon: "eco" },
-    ],
-    concerns: ["Sensitivity", "Excess Oil"],
-  },
-  {
-    slug: "barrier-repair-cica-cream",
-    name: "Barrier Repair CICA Cream",
-    tagline: "Centella Recovery Moisturizer",
-    category: "Moisturizers",
-    collection: "Soothe & Repair",
-    price: 38,
-    placeholderVariant: "linen",
-    placeholderIcon: "spa",
-    rating: 4.8,
-    reviewCount: 511,
-    size: "50ml",
-    shortDesc: "A rich-yet-breathable cream that rebuilds a compromised barrier overnight.",
-    description:
-      "Concentrated Centella Asiatica and ceramides work overnight to calm redness, restore the moisture barrier and leave skin cushioned and resilient.",
-    ritual: "Apply as the last step of your evening routine.",
-    ingredients: "Centella Asiatica 10%, Ceramide NP, Madecassoside, Shea Butter, Beta-Glucan.",
-    keyIngredients: [
-      { name: "Centella 10%", role: "Calming", desc: "Soothes redness and supports recovery.", icon: "healing" },
-      { name: "Ceramides", role: "Barrier Repair", desc: "Replenishes the skin's protective lipid barrier.", icon: "shield" },
-    ],
-    concerns: ["Redness", "Dryness", "Sensitivity"],
-  },
-  {
-    slug: "dewy-veil-sunscreen-spf50",
-    name: "Dewy Veil Sunscreen SPF50+",
-    tagline: "Invisible Daily Protection",
-    category: "Suncare",
-    collection: "Daily Ritual",
-    price: 26,
-    placeholderVariant: "stone",
-    placeholderIcon: "sunny",
-    rating: 4.7,
-    reviewCount: 803,
-    size: "50ml",
-    shortDesc: "A weightless SPF50+ PA++++ veil with zero white cast and a dewy finish.",
-    description:
-      "Broad-spectrum SPF50+ PA++++ chemical-hybrid sunscreen that layers invisibly under makeup with a hydrating, dewy finish.",
-    ritual: "Apply generously as the final step of your morning routine. Reapply through the day.",
-    ingredients: "SPF50+ PA++++ filters, Hyaluronic Acid, Centella Asiatica, Vitamin E.",
-    keyIngredients: [
-      { name: "SPF50+ PA++++", role: "UV Defense", desc: "Highest everyday broad-spectrum protection.", icon: "sunny" },
-      { name: "Hyaluronic Acid", role: "Hydration", desc: "Keeps skin dewy and comfortable all day.", icon: "water_drop" },
-    ],
-    concerns: ["Sun Protection", "Dryness"],
-  },
-  {
-    slug: "overnight-glow-sleeping-mask",
-    name: "Overnight Glow Sleeping Mask",
-    tagline: "Wash-Off Recovery Mask",
-    category: "Sheet Masks",
-    collection: "Soothe & Repair",
-    price: 30,
-    placeholderVariant: "green",
-    placeholderIcon: "bedtime",
-    rating: 4.6,
-    reviewCount: 274,
-    size: "80ml",
-    shortDesc: "A leave-on gel mask that floods skin with moisture while you sleep.",
-    description:
-      "A cooling overnight gel mask with niacinamide and hyaluronic acid that locks in hydration and leaves you waking to plump, glowing skin.",
-    ritual: "Apply a generous layer at night as the final step. Rinse in the morning.",
-    ingredients: "Niacinamide, Sodium Hyaluronate, Allantoin, Sea Kelp Extract.",
-    keyIngredients: [
-      { name: "Sea Kelp", role: "Replenish", desc: "Mineral-rich marine botanical for overnight recovery.", icon: "grass" },
-      { name: "Niacinamide", role: "Glow", desc: "Brightens and refines while you sleep.", icon: "wb_twilight" },
-    ],
-    concerns: ["Dryness", "Dullness"],
-  },
-  {
-    slug: "pore-fresh-clay-mask",
-    name: "Pore Fresh Clay Mask",
-    tagline: "Detoxifying Wash-Off Clay",
-    category: "Sheet Masks",
-    collection: "Soothe & Repair",
-    price: 24,
-    placeholderVariant: "stone",
-    placeholderIcon: "spa",
-    rating: 4.5,
-    reviewCount: 198,
-    size: "100ml",
-    shortDesc: "A gentle clay mask that decongests pores without over-drying.",
-    description:
-      "Kaolin and volcanic clay draw out excess sebum and impurities while green tea and centella keep skin balanced and calm.",
-    ritual: "Apply an even layer to clean skin, leave 10 minutes, rinse. Use 1–2 times weekly.",
-    ingredients: "Kaolin, Volcanic Ash, Green Tea, Centella Asiatica, Glycerin.",
-    keyIngredients: [
-      { name: "Volcanic Clay", role: "Detox", desc: "Absorbs excess oil and decongests pores.", icon: "filter_hdr" },
-      { name: "Green Tea", role: "Balance", desc: "Calms and keeps skin comfortable.", icon: "eco" },
-    ],
-    concerns: ["Pores", "Excess Oil", "Texture"],
+    trending: true,
   },
 ];
+
+const fillerProducts: Product[] = [
+  mk({ slug: "glass-skin-glow-serum", name: "Glass Skin Glow Serum", category: "Serums", collection: "Daily Ritual", price: 36, placeholderIcon: "opacity", rating: 4.7, reviewCount: 642, size: "30ml", badge: "Trending", trending: true, concerns: ["Dullness", "Uneven Tone", "Texture"], shortDesc: "A weightless brightening serum for that signature dewy K-beauty glass-skin finish.", keyIngredients: [{ name: "Niacinamide 5%", role: "Brightening", desc: "Visibly evens tone and fades the look of dark spots.", icon: "wb_sunny" }, { name: "Rice Ferment", role: "Radiance", desc: "Antioxidant-rich ferment for a luminous glow.", icon: "grain" }] }),
+  mk({ slug: "ocean-mist-gel-cleanser", name: "Ocean Mist Gel Cleanser", category: "Cleansers", price: 22, placeholderIcon: "water_drop", rating: 4.6, reviewCount: 389, size: "150ml", concerns: ["Sensitivity", "Excess Oil"], shortDesc: "A low-pH gel cleanser that melts away impurities without stripping the barrier." }),
+  mk({ slug: "barrier-repair-cica-cream", name: "Barrier Repair CICA Cream", category: "Moisturizers", collection: "Soothe & Repair", price: 38, placeholderIcon: "spa", rating: 4.8, reviewCount: 511, size: "50ml", badge: "Best Seller", bestSeller: true, concerns: ["Redness", "Dryness", "Sensitivity"], shortDesc: "A rich-yet-breathable cream that rebuilds a compromised barrier overnight." }),
+  mk({ slug: "dewy-veil-sunscreen-spf50", name: "Dewy Veil Sunscreen SPF50+", category: "Suncare", price: 26, placeholderIcon: "sunny", rating: 4.7, reviewCount: 803, size: "50ml", badge: "Best Seller", bestSeller: true, trending: true, concerns: ["Sun Protection", "Dryness"], shortDesc: "A weightless SPF50+ PA++++ veil with zero white cast and a dewy finish." }),
+  mk({ slug: "overnight-glow-sleeping-mask", name: "Overnight Glow Sleeping Mask", category: "Sheet Masks", collection: "Soothe & Repair", price: 30, placeholderIcon: "bedtime", rating: 4.6, reviewCount: 274, size: "80ml", concerns: ["Dryness", "Dullness"], shortDesc: "A leave-on gel mask that floods skin with moisture while you sleep." }),
+  mk({ slug: "pore-fresh-clay-mask", name: "Pore Fresh Clay Mask", category: "Sheet Masks", collection: "Soothe & Repair", price: 24, placeholderIcon: "filter_hdr", rating: 4.5, reviewCount: 198, size: "100ml", concerns: ["Pores", "Excess Oil", "Texture"], shortDesc: "A gentle clay mask that decongests pores without over-drying." }),
+  mk({ slug: "snail-mucin-repair-essence", name: "Snail Mucin Repair Essence", category: "Essences", price: 29, placeholderIcon: "auto_awesome", rating: 4.8, reviewCount: 1542, size: "100ml", badge: "Trending", trending: true, concerns: ["Texture", "Dullness", "Fine Lines"], shortDesc: "96% snail secretion filtrate to repair, plump and add a healthy bounce." }),
+  mk({ slug: "rice-water-bright-toner", name: "Rice Water Bright Toner", category: "Toners", price: 21, placeholderIcon: "grain", rating: 4.6, reviewCount: 421, size: "200ml", isNew: true, concerns: ["Dullness", "Uneven Tone"], shortDesc: "A fermented rice toner that preps and brightens for a translucent glow." }),
+  mk({ slug: "vitamin-c-brightening-serum", name: "Vitamin C Brightening Serum", category: "Serums", price: 34, placeholderIcon: "wb_sunny", rating: 4.7, reviewCount: 688, size: "30ml", concerns: ["Dullness", "Uneven Tone", "Dark Spots"], shortDesc: "Stable 15% vitamin C to fade dark spots and boost morning radiance." }),
+  mk({ slug: "green-tea-balancing-toner", name: "Green Tea Balancing Toner", category: "Toners", price: 19, placeholderIcon: "eco", rating: 4.5, reviewCount: 312, isNew: true, concerns: ["Excess Oil", "Pores"], shortDesc: "An antioxidant toner that balances oil and refreshes tired skin." }),
+  mk({ slug: "ceramide-moisture-cream", name: "Ceramide Moisture Cream", category: "Moisturizers", price: 33, placeholderIcon: "shield", rating: 4.7, reviewCount: 540, size: "50ml", concerns: ["Dryness", "Sensitivity"], shortDesc: "A ceramide-rich cream that locks in moisture and fortifies the barrier." }),
+  mk({ slug: "hyaluronic-aqua-gel", name: "Hyaluronic Aqua Gel", category: "Moisturizers", price: 27, placeholderIcon: "water_drop", rating: 4.6, reviewCount: 298, badge: "Trending", trending: true, concerns: ["Hydration", "Oily Skin"], shortDesc: "An oil-free aqua gel that delivers a burst of weightless hydration." }),
+  mk({ slug: "propolis-glow-ampoule", name: "Propolis Glow Ampoule", category: "Serums", price: 35, placeholderIcon: "hive", rating: 4.8, reviewCount: 765, size: "30ml", concerns: ["Dullness", "Redness"], shortDesc: "Black bee propolis ampoule for nourished, lit-from-within skin." }),
+  mk({ slug: "centella-calming-mask", name: "Centella Calming Sheet Mask", category: "Sheet Masks", price: 18, placeholderIcon: "spa", rating: 4.7, reviewCount: 933, badge: "Best Seller", bestSeller: true, concerns: ["Redness", "Sensitivity"], shortDesc: "A soothing centella sheet mask to calm redness in 15 minutes." }),
+  mk({ slug: "collagen-firming-mask", name: "Collagen Firming Sheet Mask", category: "Sheet Masks", price: 20, placeholderIcon: "diamond", rating: 4.6, reviewCount: 410, isNew: true, concerns: ["Fine Lines", "Firmness"], shortDesc: "Marine collagen mask for plump, firm and bouncy-looking skin." }),
+  mk({ slug: "gentle-foam-cleanser", name: "Gentle Foam Cleanser", category: "Cleansers", price: 17, placeholderIcon: "soap", rating: 4.5, reviewCount: 356, concerns: ["Sensitivity"], shortDesc: "A creamy low-pH foam that cleanses without tightness." }),
+  mk({ slug: "deep-cleansing-oil", name: "Deep Cleansing Oil", category: "Cleansers", price: 23, placeholderIcon: "opacity", rating: 4.7, reviewCount: 612, badge: "Best Seller", bestSeller: true, concerns: ["Makeup", "Excess Oil"], shortDesc: "A featherlight oil that melts away SPF and makeup, rinses clean." }),
+  mk({ slug: "brightening-eye-cream", name: "Brightening Eye Cream", category: "Eye Care", price: 28, placeholderIcon: "visibility", rating: 4.6, reviewCount: 274, isNew: true, concerns: ["Dark Circles", "Fine Lines"], shortDesc: "A caffeine + peptide eye cream to depuff and brighten tired eyes." }),
+  mk({ slug: "retinol-renewal-night-serum", name: "Retinol Renewal Night Serum", category: "Serums", price: 42, placeholderIcon: "bedtime", rating: 4.8, reviewCount: 489, badge: "Trending", trending: true, concerns: ["Fine Lines", "Texture", "Firmness"], shortDesc: "Encapsulated retinol that renews texture overnight, gently." }),
+  mk({ slug: "aha-bha-exfoliating-toner", name: "AHA·BHA Exfoliating Toner", category: "Exfoliators", price: 25, placeholderIcon: "science", rating: 4.6, reviewCount: 521, concerns: ["Texture", "Pores", "Dullness"], shortDesc: "A liquid exfoliant that smooths texture and unclogs pores." }),
+  mk({ slug: "soothing-aloe-gel", name: "Soothing Aloe Gel", category: "Moisturizers", price: 15, placeholderIcon: "eco", rating: 4.5, reviewCount: 690, concerns: ["Redness", "Hydration"], shortDesc: "Multi-use 92% aloe gel to cool, calm and hydrate anywhere." }),
+  mk({ slug: "lip-sleeping-mask", name: "Berry Lip Sleeping Mask", category: "Lip Care", price: 16, placeholderIcon: "favorite", rating: 4.8, reviewCount: 1120, badge: "Best Seller", bestSeller: true, trending: true, concerns: ["Dryness"], shortDesc: "An overnight berry balm for soft, plump lips by morning." }),
+  mk({ slug: "tone-up-sun-essence", name: "Tone-Up Sun Essence SPF50+", category: "Suncare", price: 24, placeholderIcon: "sunny", rating: 4.6, reviewCount: 333, isNew: true, concerns: ["Sun Protection", "Dullness"], shortDesc: "A natural tone-up sunscreen essence for an instant glow + protection." }),
+  mk({ slug: "peptide-firming-serum", name: "Peptide Firming Serum", category: "Serums", price: 39, placeholderIcon: "diamond", rating: 4.7, reviewCount: 277, concerns: ["Firmness", "Fine Lines"], shortDesc: "A multi-peptide serum that visibly firms and improves elasticity." }),
+  mk({ slug: "houttuynia-calming-toner", name: "Houttuynia Calming Toner", category: "Toners", price: 22, placeholderIcon: "spa", rating: 4.7, reviewCount: 458, concerns: ["Redness", "Acne", "Sensitivity"], shortDesc: "A 90% houttuynia cordata toner for blemish-prone, reactive skin." }),
+  mk({ slug: "milk-protein-body-lotion", name: "Milk Protein Body Lotion", category: "Body", price: 20, placeholderIcon: "spa", rating: 4.5, reviewCount: 188, isNew: true, concerns: ["Dryness"], shortDesc: "A fast-absorbing milk protein lotion for soft, nourished skin." }),
+];
+
+export const products: Product[] = [...realProducts, ...fillerProducts];
 
 export const categories = [
   "All",
   "Toner Pads",
   "Sheet Masks",
   "Serums",
+  "Essences",
+  "Toners",
   "Cleansers",
   "Moisturizers",
   "Suncare",
+  "Eye Care",
+  "Lip Care",
+  "Exfoliators",
+  "Body",
+];
+
+export const shopByCategory = [
+  { name: "Sheet Masks", icon: "face_retouching_natural", variant: "green" as const },
+  { name: "Toner Pads", icon: "blur_circular", variant: "linen" as const },
+  { name: "Serums", icon: "opacity", variant: "stone" as const },
+  { name: "Cleansers", icon: "soap", variant: "dark" as const },
+  { name: "Moisturizers", icon: "spa", variant: "green" as const },
+  { name: "Suncare", icon: "sunny", variant: "linen" as const },
+  { name: "Eye Care", icon: "visibility", variant: "stone" as const },
+  { name: "Lip Care", icon: "favorite", variant: "dark" as const },
+];
+
+export const shopByConcern = [
+  { name: "Hydration", icon: "water_drop" },
+  { name: "Sensitivity", icon: "spa" },
+  { name: "Dullness", icon: "wb_sunny" },
+  { name: "Pores", icon: "filter_hdr" },
+  { name: "Redness", icon: "healing" },
+  { name: "Fine Lines", icon: "diamond" },
+  { name: "Acne", icon: "blur_on" },
+  { name: "Uneven Tone", icon: "gradient" },
 ];
 
 export function getProduct(slug: string) {
@@ -299,8 +274,19 @@ export function getProduct(slug: string) {
 }
 
 export function getRelated(slug: string, limit = 4) {
-  return products.filter((p) => p.slug !== slug).slice(0, limit);
+  const me = getProduct(slug);
+  const sameCat = products.filter((p) => p.slug !== slug && p.category === me?.category);
+  const rest = products.filter((p) => p.slug !== slug && p.category !== me?.category);
+  return [...sameCat, ...rest].slice(0, limit);
 }
+
+export const byCategory = (cat: string, limit = 12) =>
+  products.filter((p) => p.category === cat).slice(0, limit);
+export const newArrivals = (limit = 12) => products.filter((p) => p.isNew).slice(0, limit);
+export const trendingNow = (limit = 12) => products.filter((p) => p.trending).slice(0, limit);
+export const bestSellers = (limit = 12) => products.filter((p) => p.bestSeller).slice(0, limit);
+export const underPrice = (max: number, limit = 12) =>
+  products.filter((p) => p.price < max).slice(0, limit);
 
 export type Review = {
   name: string;
