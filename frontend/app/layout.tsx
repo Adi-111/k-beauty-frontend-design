@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
+import PaletteSwitcher from "@/components/PaletteSwitcher";
 
 const display = Bodoni_Moda({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
         <main className="pt-[100px] pb-24 md:pb-0 min-h-screen">{children}</main>
         <Footer />
         <MobileBottomNav />
+        <PaletteSwitcher />
       </body>
     </html>
   );
