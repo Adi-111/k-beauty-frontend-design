@@ -2,18 +2,50 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Dimensions, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { RoseNoir } from '@/constants/theme';
 import { useCart } from '@/context/cart-context';
 import { resolveImage } from '@/lib/product-images';
 
-const { width: W } = Dimensions.get('window');
 const FREE_SHIP_MIN = 40;
+
+function ShipBar({ subtotal }: { subtotal: number }) {
+  const progress = Math.min(subtotal / FREE_SHIP_MIN, 1);
+  const remaining = Math.max(FREE_SHIP_MIN - subtotal, 0);
+  const fillWidth = useSharedValue(0);
+
+  const fillAnim = useAnimatedStyle(() => ({
+    width: `${fillWidth.value * 100}%` as any,
+  }));
+
+  // Animate whenever progress changes
+  fillWidth.value = withTiming(progress, { duration: 500 });
+
+  return (
+    <View style={styles.shipBar}>
+      <View style={styles.shipTrack}>
+        <Animated.View style={[styles.shipFill, fillAnim]} />
+      </View>
+      <Text style={styles.shipText}>
+        {remaining === 0 ? '🎉 You have free shipping!' : `Add $${remaining.toFixed(2)} more for free shipping`}
+      </Text>
+    </View>
+  );
+}
+
+function SwipeDeleteAction({ onDelete }: { onDelete: () => void }) {
+  return (
+    <TouchableOpacity style={styles.deleteAction} onPress={onDelete}>
+      <Ionicons name="trash-outline" size={20} color="#fff" />
+      <Text style={styles.deleteActionText}>Remove</Text>
+    </TouchableOpacity>
+  );
+}
 
 export default function CartScreen() {
   const { items, removeItem, setQty, subtotal, itemCount } = useCart();
-  const progress = Math.min(subtotal / FREE_SHIP_MIN, 1);
-  const remaining = Math.max(FREE_SHIP_MIN - subtotal, 0);
 
   if (items.length === 0) {
     return (
@@ -43,49 +75,45 @@ export default function CartScreen() {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-        {/* Free shipping bar */}
-        <View style={styles.shipBar}>
-          <View style={styles.shipTrack}>
-            <View style={[styles.shipFill, { width: `${progress * 100}%` }]} />
-          </View>
-          <Text style={styles.shipText}>
-            {remaining === 0 ? '🎉 You have free shipping!' : `Add $${remaining.toFixed(2)} more for free shipping`}
-          </Text>
-        </View>
+        {/* Animated free shipping bar */}
+        <ShipBar subtotal={subtotal} />
 
-        {/* Items */}
+        {/* Items — swipe left to remove */}
         {items.map(({ product: p, qty }) => {
           const img = resolveImage(p.image);
           return (
-            <View key={p.slug} style={styles.item}>
-              <View style={styles.itemImg}>
-                {img ? (
-                  <Image source={img} style={{ flex: 1 }} contentFit="cover" />
-                ) : (
-                  <View style={{ flex: 1, backgroundColor: RoseNoir.surfaceContainerLow }} />
-                )}
-              </View>
-              <View style={styles.itemInfo}>
-                <Text style={styles.itemCat}>{p.category}</Text>
-                <Text style={styles.itemName} numberOfLines={2}>{p.name}</Text>
-                <Text style={styles.itemSize}>{p.size}</Text>
-                <View style={styles.itemBottom}>
-                  <View style={styles.qtyRow}>
-                    <TouchableOpacity style={styles.qtyBtn} onPress={() => setQty(p.slug, qty - 1)}>
-                      <Text style={styles.qtyBtnText}>−</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.qtyNum}>{qty}</Text>
-                    <TouchableOpacity style={styles.qtyBtn} onPress={() => setQty(p.slug, qty + 1)}>
-                      <Text style={styles.qtyBtnText}>+</Text>
-                    </TouchableOpacity>
+            <Swipeable
+              key={p.slug}
+              renderRightActions={() => <SwipeDeleteAction onDelete={() => removeItem(p.slug)} />}
+              overshootRight={false}
+            >
+              <View style={styles.item}>
+                <View style={styles.itemImg}>
+                  {img ? (
+                    <Image source={img} style={{ flex: 1 }} contentFit="cover" />
+                  ) : (
+                    <View style={{ flex: 1, backgroundColor: RoseNoir.surfaceContainerLow }} />
+                  )}
+                </View>
+                <View style={styles.itemInfo}>
+                  <Text style={styles.itemCat}>{p.category}</Text>
+                  <Text style={styles.itemName} numberOfLines={2}>{p.name}</Text>
+                  <Text style={styles.itemSize}>{p.size}</Text>
+                  <View style={styles.itemBottom}>
+                    <View style={styles.qtyRow}>
+                      <TouchableOpacity style={styles.qtyBtn} onPress={() => setQty(p.slug, qty - 1)}>
+                        <Text style={styles.qtyBtnText}>−</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.qtyNum}>{qty}</Text>
+                      <TouchableOpacity style={styles.qtyBtn} onPress={() => setQty(p.slug, qty + 1)}>
+                        <Text style={styles.qtyBtnText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={styles.itemPrice}>${(p.price * qty).toFixed(2)}</Text>
                   </View>
-                  <Text style={styles.itemPrice}>${(p.price * qty).toFixed(2)}</Text>
                 </View>
               </View>
-              <TouchableOpacity style={styles.removeBtn} onPress={() => removeItem(p.slug)}>
-                <Text style={styles.removeBtnText}>✕</Text>
-              </TouchableOpacity>
-            </View>
+            </Swipeable>
           );
         })}
 
@@ -158,6 +186,16 @@ const styles = StyleSheet.create({
   shipTrack: { height: 6, backgroundColor: 'rgba(107,30,58,0.12)', borderRadius: 3, overflow: 'hidden' },
   shipFill: { height: '100%', backgroundColor: RoseNoir.primary, borderRadius: 3 },
   shipText: { fontSize: 13, color: RoseNoir.primary, fontWeight: '600' },
+  deleteAction: {
+    backgroundColor: '#c0392b',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 84,
+    borderRadius: 16,
+    marginBottom: 14,
+    gap: 4,
+  },
+  deleteActionText: { fontSize: 11, color: '#fff', fontWeight: '700' },
   item: {
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -182,8 +220,6 @@ const styles = StyleSheet.create({
   qtyBtnText: { fontSize: 18, color: RoseNoir.primary, fontWeight: '500' },
   qtyNum: { width: 32, textAlign: 'center', fontSize: 14, fontWeight: '700', color: RoseNoir.onBackground },
   itemPrice: { fontSize: 16, fontWeight: '800', color: RoseNoir.primary },
-  removeBtn: { padding: 4, alignSelf: 'flex-start' },
-  removeBtnText: { fontSize: 16, color: RoseNoir.outlineVariant },
   summary: {
     backgroundColor: '#fff',
     borderRadius: 20,

@@ -3,16 +3,18 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-  Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent,
-  ScrollView, StyleSheet, Text, TouchableOpacity, View,
+  ActivityIndicator, Dimensions, FlatList, LayoutAnimation, NativeScrollEvent, NativeSyntheticEvent,
+  Platform, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { RoseNoir } from '@/constants/theme';
 import { useCart } from '@/context/cart-context';
 import { resolveImage } from '@/lib/product-images';
-import { getProduct, getRelated } from '@/lib/products';
+import { api, toProduct, type ApiProduct } from '@/lib/api';
+import type { Product } from '@/lib/products';
 import { ProductCard } from '@/components/product-card';
 import { Stars } from '@/components/stars';
 import { Placeholder } from '@/components/placeholder';
@@ -23,9 +25,15 @@ const CARD_W = (W - 52) / 2;
 
 function Accordion({ title, children }: { title: string; children: string }) {
   const [open, setOpen] = useState(false);
+  const toggle = () => {
+    if (Platform.OS !== 'web') {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
+    setOpen(o => !o);
+  };
   return (
     <View style={acc.wrap}>
-      <TouchableOpacity style={acc.row} onPress={() => setOpen(o => !o)}>
+      <TouchableOpacity style={acc.row} onPress={toggle} activeOpacity={0.7}>
         <Text style={acc.title}>{title}</Text>
         <Ionicons name={open ? 'chevron-up' : 'chevron-down'} size={18} color={RoseNoir.primary} />
       </TouchableOpacity>
@@ -43,12 +51,39 @@ const acc = StyleSheet.create({
 
 export default function ProductDetailScreen() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
-  const product = getProduct(slug);
-  const related = getRelated(slug);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [related, setRelated] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const { addItem } = useCart();
   const [galleryIdx, setGalleryIdx] = useState(0);
   const [added, setAdded] = useState(false);
   const insets = useSafeAreaInsets();
+
+  const addBtnScale = useSharedValue(1);
+  const addBtnAnim = useAnimatedStyle(() => ({ transform: [{ scale: addBtnScale.value }] }));
+
+  useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
+    Promise.all([
+      api.get<ApiProduct>(`/products/${slug}`),
+      api.get<ApiProduct[]>(`/products/${slug}/related`),
+    ]).then(([p, rel]) => {
+      if (p) setProduct(toProduct(p));
+      setRelated((rel ?? []).map(toProduct));
+    }).catch(() => {}).finally(() => setLoading(false));
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
+        <TouchableOpacity style={[styles.backCircle, { margin: 16 }]} onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={20} color={RoseNoir.primary} />
+        </TouchableOpacity>
+        <ActivityIndicator color={RoseNoir.primary} style={{ flex: 1 }} />
+      </SafeAreaView>
+    );
+  }
 
   if (!product) {
     return (
@@ -234,16 +269,19 @@ export default function ProductDetailScreen() {
           <Text style={styles.stickyPriceVal}>${product.price}</Text>
           {product.compareAt && <Text style={styles.stickyPriceOld}>${product.compareAt}</Text>}
         </View>
-        <TouchableOpacity
-          style={[styles.addBtn, added && styles.addBtnAdded]}
+        <Pressable
           onPress={handleAddToCart}
-          activeOpacity={0.85}
+          onPressIn={() => { addBtnScale.value = withSpring(0.95, { damping: 15, stiffness: 350 }); }}
+          onPressOut={() => { addBtnScale.value = withSpring(1, { damping: 15, stiffness: 350 }); }}
+          style={{ flex: 1 }}
         >
-          {added
-            ? <><Ionicons name="checkmark-circle" size={18} color="#fff" /><Text style={styles.addBtnText}>Added to Bag</Text></>
-            : <Text style={styles.addBtnText}>Add to Bag</Text>
-          }
-        </TouchableOpacity>
+          <Animated.View style={[styles.addBtn, added && styles.addBtnAdded, addBtnAnim]}>
+            {added
+              ? <><Ionicons name="checkmark-circle" size={18} color="#fff" /><Text style={styles.addBtnText}>Added to Bag</Text></>
+              : <Text style={styles.addBtnText}>Add to Bag</Text>
+            }
+          </Animated.View>
+        </Pressable>
       </View>
     </View>
   );

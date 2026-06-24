@@ -1,9 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import Placeholder from "./Placeholder";
 import type { Product } from "@/lib/products";
+import { useCart } from "@/context/cart-context";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }: { product: Product & { id?: number } }) {
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product.id) return;
+    addItem(product as Product & { id: number });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
+
   return (
     <Link href={`/product/${product.slug}`} className="group block">
       <div className="relative aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden mb-5">
@@ -28,9 +44,19 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
-        <span className="absolute bottom-4 left-4 right-4 bg-primary text-on-primary text-center font-body text-label-sm uppercase tracking-wider py-3 rounded-full translate-y-14 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-          Quick Add +
-        </span>
+        <button
+          onClick={handleQuickAdd}
+          className="absolute bottom-4 left-4 right-4 bg-primary text-on-primary text-center font-body text-label-sm uppercase tracking-wider py-3 rounded-full translate-y-14 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-1.5"
+        >
+          {added ? (
+            <>
+              <span className="material-symbols-outlined icon-fill text-[16px]">check_circle</span>
+              Added
+            </>
+          ) : (
+            "Quick Add +"
+          )}
+        </button>
       </div>
       <div className="space-y-1">
         <p className="font-body text-label-sm uppercase tracking-widest text-on-surface-variant">

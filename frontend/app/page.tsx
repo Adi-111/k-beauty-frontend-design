@@ -3,7 +3,7 @@ import Image from "next/image";
 import ProductRail from "@/components/ProductRail";
 import HeroBanners from "@/components/HeroBanners";
 import Stars from "@/components/Stars";
-import { reviews, bestSellers, trendingNow } from "@/lib/products";
+import { serverFetch, toProduct, type ApiProduct, type ApiReview } from "@/lib/api";
 
 const categories = [
   { label: "Sheet Masks", href: "/shop", image: "/products/tile-masks.jpg" },
@@ -16,7 +16,17 @@ const categories = [
   { label: "Offers", href: "/offers", image: "/products/tile-offers.jpg" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [bestSellersRaw, trendingRaw, reviewsRaw] = await Promise.all([
+    serverFetch<ApiProduct[]>('/products/best-sellers', 120),
+    serverFetch<ApiProduct[]>('/products/trending', 120),
+    serverFetch<{ data: ApiReview[] }>('/reviews?limit=3', 300),
+  ]);
+
+  const bestSellers = (bestSellersRaw ?? []).map(toProduct);
+  const trendingNow = (trendingRaw ?? []).map(toProduct);
+  const reviews = reviewsRaw?.data ?? [];
+
   return (
     <div>
       {/* HERO BANNERS */}
@@ -57,7 +67,7 @@ export default function HomePage() {
       </section>
 
       {/* BEST SELLERS RAIL */}
-      <ProductRail title="Best Sellers" subtitle="Member Favourites" products={bestSellers(10)} tone="muted" />
+      <ProductRail title="Best Sellers" subtitle="Member Favourites" products={bestSellers} tone="muted" />
 
       {/* STATS BENTO */}
       <section className="bg-surface-container-lowest px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm md:py-section-gap-lg">
@@ -90,7 +100,7 @@ export default function HomePage() {
       </section>
 
       {/* TRENDING RAIL */}
-      <ProductRail title="Trending Now" subtitle="Going Fast" products={trendingNow(10)} />
+      <ProductRail title="Trending Now" subtitle="Going Fast" products={trendingNow} />
 
       {/* REVIEWS */}
       <section className="px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm">
@@ -100,14 +110,14 @@ export default function HomePage() {
             <h2 className="font-display text-headline-lg">Loved by our Circle</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {reviews.slice(0, 3).map((r) => (
-              <div key={r.name} className="bg-surface-container-low rounded-xl p-8 space-y-4 border border-outline-variant/40">
+            {reviews.map((r) => (
+              <div key={r.id} className="bg-surface-container-low rounded-xl p-8 space-y-4 border border-outline-variant/40">
                 <Stars rating={r.rating} />
                 <h4 className="font-display text-headline-md">{r.title}</h4>
                 <p className="font-body text-body-md text-on-surface-variant">&ldquo;{r.body}&rdquo;</p>
                 <div className="flex items-center gap-2 pt-2 border-t border-outline-variant/40">
                   <span className="material-symbols-outlined icon-fill text-primary text-[18px]">verified</span>
-                  <span className="font-body text-label-sm uppercase tracking-wider">{r.name} · Verified</span>
+                  <span className="font-body text-label-sm uppercase tracking-wider">{r.authorName} · Verified</span>
                 </div>
               </div>
             ))}

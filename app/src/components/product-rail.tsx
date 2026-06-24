@@ -20,8 +20,8 @@ export function ProductRail({ title, eyebrow, products, viewAllHref, muted }: Pr
   return (
     <View style={[styles.section, muted && styles.mutedBg]}>
       <View style={styles.header}>
-        <View>
-          {eyebrow ? <Text style={styles.eyebrow}>{eyebrow}</Text> : null}
+        <View style={styles.titleWrap}>
+          {eyebrow && <Text style={styles.eyebrow}>{eyebrow}</Text>}
           <Text style={styles.title}>{title}</Text>
         </View>
         {viewAllHref && (
@@ -46,7 +46,7 @@ export function ProductRail({ title, eyebrow, products, viewAllHref, muted }: Pr
 
 const styles = StyleSheet.create({
   section: { paddingTop: 28, paddingBottom: 12 },
-  mutedBg: { backgroundColor: RoseNoir.surfaceContainerLow, paddingHorizontal: 0 },
+  mutedBg: { backgroundColor: RoseNoir.surfaceContainerLow },
   header: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -54,15 +54,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 14,
   },
+  titleWrap: { gap: 2 },
   eyebrow: {
     fontSize: 10,
     fontWeight: '700',
     color: RoseNoir.primary,
     letterSpacing: 1.5,
-    textTransform: 'uppercase',
-    marginBottom: 2,
   },
-  title: { fontSize: 20, fontWeight: '700', color: RoseNoir.onBackground, fontFamily: 'ui-serif' },
+  title: { fontSize: 22, fontWeight: '700', color: RoseNoir.onBackground, fontFamily: 'ui-serif' },
   seeAllBtn: { paddingBottom: 2 },
   seeAllText: { fontSize: 13, fontWeight: '600', color: RoseNoir.primary },
   list: { paddingHorizontal: 20, gap: GAP },

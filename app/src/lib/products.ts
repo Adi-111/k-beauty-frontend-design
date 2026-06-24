@@ -11,6 +11,7 @@ export type Stat = {
 };
 
 export type Product = {
+  id?: number;
   slug: string;
   name: string;
   tagline: string;

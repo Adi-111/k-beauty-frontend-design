@@ -1,13 +1,21 @@
 import { ProductCard } from '@/components/product-card';
 import { RoseNoir } from '@/constants/theme';
-import { categories, products } from '@/lib/products';
+import { api, toProduct, type ApiProduct } from '@/lib/api';
+import type { Product } from '@/lib/products';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  Dimensions, FlatList, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View,
+  ActivityIndicator, Dimensions, FlatList, Modal, Pressable, ScrollView,
+  StyleSheet, Text, TouchableOpacity, View,
 } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+const CATEGORY_LIST = [
+  'All', 'Toner Pads', 'Sheet Masks', 'Serums', 'Essences', 'Toners',
+  'Cleansers', 'Moisturizers', 'Suncare', 'Eye Care', 'Lip Care', 'Exfoliators', 'Body',
+];
 
 const { width: W } = Dimensions.get('window');
 const CARD_W = Math.round((W - 52) / 2);
@@ -37,34 +45,53 @@ const SORT_OPTIONS = [
   { label: 'Top Rated', value: 'rating', icon: 'ribbon-outline' as IoniconName },
 ];
 
+function CategoryChip({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const scale = useSharedValue(1);
+  const anim = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  return (
+    <Pressable
+      onPress={onPress}
+      onPressIn={() => { scale.value = withSpring(0.93, { damping: 12, stiffness: 350 }); }}
+      onPressOut={() => { scale.value = withSpring(1, { damping: 12, stiffness: 350 }); }}
+    >
+      <Animated.View style={[styles.chip, active && styles.chipActive, anim]}>
+        <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
+      </Animated.View>
+    </Pressable>
+  );
+}
+
 export default function ShopScreen() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [sort, setSort] = useState('featured');
   const [sortOpen, setSortOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = useMemo(() => {
-    let list = activeCategory === 'All' ? [...products] : products.filter(p => p.category === activeCategory);
-    if (sort === 'price_asc') list.sort((a, b) => a.price - b.price);
-    if (sort === 'price_desc') list.sort((a, b) => b.price - a.price);
-    if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
-    return list;
+  useEffect(() => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (activeCategory !== 'All') params.set('category', activeCategory);
+    if (sort !== 'featured') params.set('sort', sort);
+    api.get<{ data: ApiProduct[]; total: number }>(`/products?${params.toString()}`)
+      .then(res => setAllProducts((res?.data ?? []).map(toProduct)))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [activeCategory, sort]);
 
-  const activeSortLabel = SORT_OPTIONS.find(o => o.value === sort)?.label ?? 'Featured';
+  const filtered = useMemo(() => allProducts, [allProducts]);
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
 
       {/* ── Header ── */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.eyebrow}>DISCOVER</Text>
-          <Text style={styles.title}>Skincare Rituals</Text>
+        <View style={styles.searchBar}>
+          <Ionicons name="search-outline" size={17} color={RoseNoir.onSurfaceVariant} />
+          <Text style={styles.searchPlaceholder}>Search products…</Text>
         </View>
         <TouchableOpacity style={styles.sortBtn} onPress={() => setSortOpen(true)}>
-          <Ionicons name="options-outline" size={15} color={RoseNoir.primary} />
-          <Text style={styles.sortBtnText}>{activeSortLabel}</Text>
-          <Ionicons name="chevron-down" size={13} color={RoseNoir.primary} />
+          <Ionicons name="options-outline" size={18} color={RoseNoir.primary} />
         </TouchableOpacity>
       </View>
 
@@ -75,19 +102,14 @@ export default function ShopScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.chips}
         >
-          {categories.map(cat => {
-            const active = activeCategory === cat;
-            return (
-              <TouchableOpacity
-                key={cat}
-                onPress={() => setActiveCategory(cat)}
-                style={[styles.chip, active && styles.chipActive]}
-                activeOpacity={0.75}
-              >
-                <Text style={[styles.chipText, active && styles.chipTextActive]}>{cat}</Text>
-              </TouchableOpacity>
-            );
-          })}
+          {CATEGORY_LIST.map(cat => (
+            <CategoryChip
+              key={cat}
+              label={cat}
+              active={activeCategory === cat}
+              onPress={() => setActiveCategory(cat)}
+            />
+          ))}
         </ScrollView>
         {/* Fade-out on right edge signals more chips to scroll */}
         <LinearGradient
@@ -114,15 +136,19 @@ export default function ShopScreen() {
       </View>
 
       {/* ── Product grid ── */}
-      <FlatList
-        data={filtered}
-        numColumns={2}
-        keyExtractor={item => item.slug}
-        contentContainerStyle={styles.grid}
-        columnWrapperStyle={styles.row}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <ProductCard product={item} width={CARD_W} />}
-      />
+      {loading ? (
+        <ActivityIndicator color={RoseNoir.primary} style={{ marginTop: 40 }} />
+      ) : (
+        <FlatList
+          data={filtered}
+          numColumns={2}
+          keyExtractor={item => item.slug}
+          contentContainerStyle={styles.grid}
+          columnWrapperStyle={styles.row}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <ProductCard product={item} width={CARD_W} />}
+        />
+      )}
 
       {/* ── Sort bottom sheet ── */}
       <Modal
@@ -166,29 +192,31 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 16,
     paddingTop: 10,
-    paddingBottom: 14,
+    paddingBottom: 12,
   },
-  eyebrow: { fontSize: 10, fontWeight: '700', color: RoseNoir.primary, letterSpacing: 1.6, textTransform: 'uppercase', marginBottom: 2 },
-  title: { fontSize: 24, fontWeight: '800', color: RoseNoir.onBackground, fontFamily: 'ui-serif' },
-  sortBtn: {
+  searchBar: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    backgroundColor: '#fff',
-    paddingHorizontal: 12,
-    paddingVertical: 9,
-    borderRadius: 22,
-    shadowColor: '#6b1e3a',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    gap: 8,
+    backgroundColor: RoseNoir.surfaceContainerLow,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
   },
-  sortBtnText: { fontSize: 12, fontWeight: '700', color: RoseNoir.primary },
+  searchPlaceholder: { fontSize: 14, color: RoseNoir.onSurfaceVariant },
+  sortBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: RoseNoir.surfaceContainerLow,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   // Chips
   chipsWrapper: { position: 'relative' },
@@ -219,7 +247,7 @@ const styles = StyleSheet.create({
   clearFilterText: { fontSize: 13, fontWeight: '600', color: RoseNoir.primary },
 
   // Grid
-  grid: { paddingHorizontal: 20, paddingBottom: 28 },
+  grid: { paddingHorizontal: 20, paddingBottom: 110 },
   row: { gap: 12, marginBottom: 14 },
 
   // Sort sheet

@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { RoseNoir } from '@/constants/theme';
+import { api, type ApiLoyalty, type ApiLoyaltyTransaction } from '@/lib/api';
+import { useAuth } from '@/context/auth-context';
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
@@ -21,21 +24,74 @@ const EARN: { icon: IoniconName; label: string; pts: string }[] = [
   { icon: 'camera-outline', label: 'Share on Social', pts: '+30 pts' },
 ];
 
-const ACTIVITY = [
-  { label: 'Order #OC-18234', date: 'May 28', pts: '+280' },
-  { label: 'Review submitted', date: 'May 22', pts: '+50' },
-  { label: 'Referral bonus', date: 'May 14', pts: '+200' },
-  { label: 'Redeemed reward', date: 'May 10', pts: '-100' },
-];
-
-const CURRENT_PTS = 730;
-const CURRENT_TIER = TIERS[1];
-const NEXT_TIER = TIERS[2];
-
 export default function LoyaltyScreen() {
+  const { token, user } = useAuth();
+  const [loyalty, setLoyalty] = useState<ApiLoyalty | null>(null);
+  const [transactions, setTransactions] = useState<ApiLoyaltyTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!token) { setLoading(false); return; }
+    Promise.all([
+      api.get<ApiLoyalty>('/loyalty', token),
+      api.get<ApiLoyaltyTransaction[]>('/loyalty/transactions', token),
+    ]).then(([l, t]) => {
+      if (l) setLoyalty(l);
+      setTransactions(t ?? []);
+    }).catch(() => {}).finally(() => setLoading(false));
+  }, [token]);
+
+  const CURRENT_PTS = loyalty?.points ?? 0;
+  const tierName = loyalty?.tier ?? 'Glow';
+  const CURRENT_TIER = TIERS.find(t => t.name === tierName) ?? TIERS[0];
+  const NEXT_TIER = TIERS[TIERS.findIndex(t => t.name === tierName) + 1] ?? null;
   const progress = NEXT_TIER
-    ? (CURRENT_PTS - (CURRENT_TIER.min)) / ((NEXT_TIER.min) - (CURRENT_TIER.min))
+    ? (CURRENT_PTS - CURRENT_TIER.min) / (NEXT_TIER.min - CURRENT_TIER.min)
     : 1;
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+            <Ionicons name="chevron-back" size={20} color={RoseNoir.primary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>O'Circle Rewards</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <ActivityIndicator color={RoseNoir.primary} style={{ flex: 1 }} />
+      </SafeAreaView>
+    );
+  }
+
+  if (!token) {
+    return (
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+            <Ionicons name="chevron-back" size={20} color={RoseNoir.primary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>O'Circle Rewards</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16, padding: 32 }}>
+          <Ionicons name="diamond-outline" size={56} color={RoseNoir.primary} />
+          <Text style={{ fontSize: 22, fontWeight: '800', color: RoseNoir.onBackground, fontFamily: 'ui-serif', textAlign: 'center' }}>
+            Join O'Circle Rewards
+          </Text>
+          <Text style={{ fontSize: 14, color: RoseNoir.onSurfaceVariant, textAlign: 'center', lineHeight: 22 }}>
+            Sign in to view your points, tier status, and earn rewards on every order.
+          </Text>
+          <TouchableOpacity
+            style={{ backgroundColor: RoseNoir.primary, paddingHorizontal: 32, paddingVertical: 14, borderRadius: 28, marginTop: 8 }}
+            onPress={() => router.push('/(tabs)/account')}
+          >
+            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>Sign In →</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -59,7 +115,7 @@ export default function LoyaltyScreen() {
           <View style={styles.pointsTop}>
             <View>
               <Text style={styles.welcomeText}>Welcome back</Text>
-              <Text style={styles.memberName}>Riya D.</Text>
+              <Text style={styles.memberName}>{user?.name ?? 'Member'}</Text>
             </View>
             <View style={styles.tierBadge}>
               <Ionicons name={CURRENT_TIER.icon} size={13} color="#fbf6f4" />
@@ -126,21 +182,28 @@ export default function LoyaltyScreen() {
         {/* Activity */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
-          {ACTIVITY.map((a, i) => (
-            <View key={i} style={styles.activityRow}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.activityLabel}>{a.label}</Text>
-                <Text style={styles.activityDate}>{a.date}</Text>
+          {transactions.length === 0 ? (
+            <Text style={{ fontSize: 13, color: RoseNoir.onSurfaceVariant }}>No activity yet. Start shopping to earn points!</Text>
+          ) : transactions.slice(0, 8).map(t => {
+            const isNeg = t.type === 'redeem';
+            const pts = `${isNeg ? '-' : '+'}${Math.abs(t.points)}`;
+            const date = new Date(t.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+            return (
+              <View key={t.id} style={styles.activityRow}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.activityLabel}>{t.reason}</Text>
+                  <Text style={styles.activityDate}>{date}</Text>
+                </View>
+                <Text style={[styles.activityPts, isNeg && styles.activityPtsNeg]}>{pts}</Text>
               </View>
-              <Text style={[styles.activityPts, a.pts.startsWith('-') && styles.activityPtsNeg]}>{a.pts}</Text>
-            </View>
-          ))}
+            );
+          })}
         </View>
 
         {/* Redeem */}
         <View style={[styles.section, styles.redeemBanner]}>
           <Text style={styles.redeemTitle}>Ready to redeem?</Text>
-          <Text style={styles.redeemSub}>Use your 730 points for $7.30 off your next order.</Text>
+          <Text style={styles.redeemSub}>Use your {CURRENT_PTS} points for ${(CURRENT_PTS * 0.01).toFixed(2)} off your next order.</Text>
           <TouchableOpacity style={styles.redeemBtn}>
             <Text style={styles.redeemBtnText}>Redeem Points →</Text>
           </TouchableOpacity>

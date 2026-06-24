@@ -1,13 +1,15 @@
+'use client';
+
 import { createContext, useCallback, useContext, useEffect, useReducer } from 'react';
-import { api, toProduct, type ApiCart } from '@/lib/api';
+import { api, toProduct, type ApiCart, type ApiProduct } from '@/lib/api';
 import type { Product } from '@/lib/products';
 import { useAuth } from './auth-context';
 
-export type CartItem = { product: Product; qty: number };
+export type CartItem = { product: Product & { id: number }; qty: number };
 
 type State = { items: CartItem[] };
 type Action =
-  | { type: 'ADD'; product: Product }
+  | { type: 'ADD'; product: Product & { id: number } }
   | { type: 'REMOVE'; slug: string }
   | { type: 'SET_QTY'; slug: string; qty: number }
   | { type: 'CLEAR' }
@@ -15,30 +17,24 @@ type Action =
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'INIT':
-      return { items: action.items };
+    case 'INIT': return { items: action.items };
     case 'ADD': {
       const existing = state.items.find(i => i.product.slug === action.product.slug);
-      if (existing) {
-        return { items: state.items.map(i => i.product.slug === action.product.slug ? { ...i, qty: i.qty + 1 } : i) };
-      }
+      if (existing) return { items: state.items.map(i => i.product.slug === action.product.slug ? { ...i, qty: i.qty + 1 } : i) };
       return { items: [...state.items, { product: action.product, qty: 1 }] };
     }
-    case 'REMOVE':
-      return { items: state.items.filter(i => i.product.slug !== action.slug) };
+    case 'REMOVE': return { items: state.items.filter(i => i.product.slug !== action.slug) };
     case 'SET_QTY':
       if (action.qty <= 0) return { items: state.items.filter(i => i.product.slug !== action.slug) };
       return { items: state.items.map(i => i.product.slug === action.slug ? { ...i, qty: action.qty } : i) };
-    case 'CLEAR':
-      return { items: [] };
-    default:
-      return state;
+    case 'CLEAR': return { items: [] };
+    default: return state;
   }
 }
 
 type CartCtx = {
   items: CartItem[];
-  addItem: (product: Product) => void;
+  addItem: (product: Product & { id: number }) => void;
   removeItem: (slug: string) => void;
   setQty: (slug: string, qty: number) => void;
   clearCart: () => void;
@@ -55,16 +51,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
   const { token } = useAuth();
 
-  // Hydrate cart from backend on login
   useEffect(() => {
     if (!token) { dispatch({ type: 'CLEAR' }); return; }
     api.get<ApiCart>('/cart', token).then(cart => {
-      const items = (cart.items ?? []).map(ci => ({ product: toProduct(ci.product), qty: ci.qty }));
+      const items = (cart?.items ?? []).map(ci => ({ product: toProduct(ci.product as ApiProduct), qty: ci.qty }));
       dispatch({ type: 'INIT', items });
     }).catch(() => {});
   }, [token]);
 
-  const addItem = useCallback((product: Product) => {
+  const addItem = useCallback((product: Product & { id: number }) => {
     dispatch({ type: 'ADD', product });
     if (token && product.id) {
       api.post('/cart/items', { productId: product.id, qty: 1 }, token).catch(() => {});

@@ -1,58 +1,92 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
-import { Platform, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native';
+import { useEffect } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RoseNoir } from '@/constants/theme';
 import { useCart } from '@/context/cart-context';
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
 function TabIcon({ name, nameFocused, focused }: { name: IoniconName; nameFocused: IoniconName; focused: boolean }) {
+  const scale = useSharedValue(focused ? 1 : 0.88);
+
+  useEffect(() => {
+    scale.value = withSpring(focused ? 1 : 0.88, {
+      damping: 10,
+      stiffness: 220,
+      mass: 0.6,
+    });
+  }, [focused]);
+
+  const anim = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
-    <View style={styles.tabItem}>
-      <Ionicons name={focused ? nameFocused : name} size={24} color={focused ? RoseNoir.primary : '#b0a0a5'} />
-      {focused && <View style={styles.activeDot} />}
-    </View>
+    <Animated.View style={[styles.tabIcon, focused && styles.tabIconActive, anim]}>
+      <Ionicons name={focused ? nameFocused : name} size={22} color={focused ? '#fff' : '#9a8490'} />
+    </Animated.View>
   );
 }
 
 function CartTabIcon({ focused }: { focused: boolean }) {
   const { itemCount } = useCart();
+  const scale = useSharedValue(focused ? 1 : 0.88);
+
+  useEffect(() => {
+    scale.value = withSpring(focused ? 1 : 0.88, {
+      damping: 10,
+      stiffness: 220,
+      mass: 0.6,
+    });
+  }, [focused]);
+
+  const anim = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
-    <View style={styles.tabItem}>
-      <View>
-        <Ionicons name={focused ? 'bag' : 'bag-outline'} size={24} color={focused ? RoseNoir.primary : '#b0a0a5'} />
-        {itemCount > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{itemCount > 9 ? '9+' : itemCount}</Text>
-          </View>
-        )}
-      </View>
-      {focused && <View style={styles.activeDot} />}
-    </View>
+    <Animated.View style={[styles.tabIcon, focused && styles.tabIconActive, anim]}>
+      <Ionicons name={focused ? 'bag' : 'bag-outline'} size={22} color={focused ? '#fff' : '#9a8490'} />
+      {itemCount > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{itemCount > 9 ? '9+' : itemCount}</Text>
+        </View>
+      )}
+    </Animated.View>
   );
 }
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#fff',
+          position: 'absolute',
+          bottom: Math.max(insets.bottom, 16),
+          left: 24,
+          right: 24,
+          height: 64,
+          borderRadius: 32,
+          backgroundColor: '#1a0a10',
           borderTopWidth: 0,
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 0.06,
-          shadowRadius: 16,
-          elevation: 12,
-          paddingTop: 8,
-          paddingBottom: Platform.OS === 'ios' ? 4 : 10,
-          height: Platform.OS === 'ios' ? 82 : 66,
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.22,
+          shadowRadius: 20,
+          elevation: 20,
+          paddingBottom: 0,
+          paddingTop: 0,
         },
-        tabBarActiveTintColor: RoseNoir.primary,
-        tabBarInactiveTintColor: '#b0a0a5',
-        tabBarLabelStyle: { fontSize: 10, fontWeight: '600', marginTop: 1 },
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#9a8490',
+        tabBarLabelStyle: { display: 'none' },
+        tabBarItemStyle: { justifyContent: 'center' },
       }}
     >
       <Tabs.Screen
@@ -94,21 +128,27 @@ export default function TabsLayout() {
 }
 
 const styles = StyleSheet.create({
-  tabItem: { alignItems: 'center', gap: 3 },
-  activeDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: RoseNoir.primary },
-  badge: {
-    position: 'absolute',
-    top: -4,
-    right: -8,
-    backgroundColor: RoseNoir.primary,
-    borderRadius: 8,
-    minWidth: 16,
-    height: 16,
+  tabIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 3,
-    borderWidth: 1.5,
-    borderColor: '#fff',
   },
-  badgeText: { fontSize: 9, color: '#fff', fontWeight: '800' },
+  tabIconActive: {
+    backgroundColor: RoseNoir.primary,
+  },
+  badge: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    backgroundColor: '#fff',
+    borderRadius: 7,
+    minWidth: 14,
+    height: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 2,
+  },
+  badgeText: { fontSize: 8, color: RoseNoir.primary, fontWeight: '800' },
 });

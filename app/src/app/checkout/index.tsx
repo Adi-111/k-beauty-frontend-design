@@ -3,11 +3,14 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,
+  ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView,
+  StyleSheet, Text, TextInput, TouchableOpacity, View,
 } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 import { RoseNoir } from '@/constants/theme';
 import { useCart } from '@/context/cart-context';
+import { useAuth } from '@/context/auth-context';
+import { api, type ApiOrder } from '@/lib/api';
 
 const STEPS = ['Information', 'Shipping', 'Payment'];
 const SHIPPING = [
@@ -24,11 +27,41 @@ export default function CheckoutScreen() {
   const [step, setStep] = useState(0);
   const [shipping, setShipping] = useState('standard');
   const [payment, setPayment] = useState('card');
+  const [placing, setPlacing] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
   const { items, subtotal, clearCart } = useCart();
+  const { token, user } = useAuth();
 
-  const handleNext = () => {
-    if (step < 2) setStep(s => s + 1);
-    else { clearCart(); setStep(3); }
+  // Controlled delivery form state
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [phone, setPhone] = useState('');
+  const [fullName, setFullName] = useState(user?.name ?? '');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [pin, setPin] = useState('');
+
+  const handleNext = async () => {
+    if (step < 2) { setStep(s => s + 1); return; }
+    if (!token) { Alert.alert('Sign in required', 'Please sign in to place an order.'); return; }
+    if (!street || !city || !pin) { Alert.alert('Missing info', 'Please complete your delivery address.'); return; }
+    setPlacing(true);
+    try {
+      const order = await api.post<ApiOrder>('/orders', {
+        paymentMethod: payment,
+        shippingMethod: shipping,
+        contactEmail: email,
+        contactPhone: phone,
+        shippingAddress: { street, city, state, pin, country: 'India' },
+      }, token);
+      clearCart();
+      setOrderNumber(order.orderNumber);
+      setStep(3);
+    } catch (e: any) {
+      Alert.alert('Order failed', e?.message ?? 'Please try again.');
+    } finally {
+      setPlacing(false);
+    }
   };
 
   if (step === 3) {
@@ -41,7 +74,7 @@ export default function CheckoutScreen() {
         <Animated.Text entering={FadeIn.delay(600)} style={styles.successSub}>
           Your ritual is on its way. We'll send tracking details to your email.
         </Animated.Text>
-        <Animated.Text entering={FadeIn.delay(700)} style={styles.orderNum}>Order #OC-{Math.floor(Math.random() * 90000) + 10000}</Animated.Text>
+        <Animated.Text entering={FadeIn.delay(700)} style={styles.orderNum}>Order #{orderNumber}</Animated.Text>
         <TouchableOpacity style={styles.successBtn} onPress={() => router.replace('/(tabs)')}>
           <Text style={styles.successBtnText}>Back to Home →</Text>
         </TouchableOpacity>
@@ -79,18 +112,25 @@ export default function CheckoutScreen() {
           {step === 0 && (
             <View style={styles.form}>
               <Text style={styles.formTitle}>Delivery Information</Text>
-              {[
-                { label: 'Email', ph: 'hello@email.com', type: 'email-address' as const },
-                { label: 'Phone', ph: '+91 98765 43210', type: 'phone-pad' as const },
-                { label: 'Full Name', ph: 'Your full name', type: 'default' as const },
-                { label: 'Address Line 1', ph: 'Building, Street', type: 'default' as const },
-                { label: 'City', ph: 'City', type: 'default' as const },
-                { label: 'State', ph: 'State', type: 'default' as const },
-                { label: 'PIN Code', ph: '400001', type: 'numeric' as const },
-              ].map(f => (
+              {([
+                { label: 'Email', ph: 'hello@email.com', type: 'email-address' as const, value: email, set: setEmail },
+                { label: 'Phone', ph: '+91 98765 43210', type: 'phone-pad' as const, value: phone, set: setPhone },
+                { label: 'Full Name', ph: 'Your full name', type: 'default' as const, value: fullName, set: setFullName },
+                { label: 'Address Line 1', ph: 'Building, Street', type: 'default' as const, value: street, set: setStreet },
+                { label: 'City', ph: 'City', type: 'default' as const, value: city, set: setCity },
+                { label: 'State', ph: 'State', type: 'default' as const, value: state, set: setState },
+                { label: 'PIN Code', ph: '400001', type: 'numeric' as const, value: pin, set: setPin },
+              ] as { label: string; ph: string; type: 'email-address' | 'phone-pad' | 'default' | 'numeric'; value: string; set: (v: string) => void }[]).map(f => (
                 <View key={f.label} style={styles.inputWrap}>
                   <Text style={styles.inputLabel}>{f.label}</Text>
-                  <TextInput style={styles.input} placeholder={f.ph} keyboardType={f.type} placeholderTextColor={RoseNoir.outlineVariant} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder={f.ph}
+                    keyboardType={f.type}
+                    value={f.value}
+                    onChangeText={f.set}
+                    placeholderTextColor={RoseNoir.outlineVariant}
+                  />
                 </View>
               ))}
             </View>
@@ -162,10 +202,12 @@ export default function CheckoutScreen() {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.nextBtn} onPress={handleNext}>
-            <Text style={styles.nextBtnText}>
-              {step === 2 ? 'Place Order →' : `Continue to ${STEPS[step + 1]} →`}
-            </Text>
+          <TouchableOpacity style={styles.nextBtn} onPress={handleNext} disabled={placing}>
+            {placing ? <ActivityIndicator color="#fff" /> : (
+              <Text style={styles.nextBtnText}>
+                {step === 2 ? 'Place Order →' : `Continue to ${STEPS[step + 1]} →`}
+              </Text>
+            )}
           </TouchableOpacity>
 
           <View style={{ height: 40 }} />

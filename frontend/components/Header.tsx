@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useCart } from "@/context/cart-context";
+import { useAuth } from "@/context/auth-context";
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
@@ -14,6 +16,8 @@ const navLinks = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { itemCount } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -36,55 +40,63 @@ export default function Header() {
           }`}
           id="main-header"
         >
-        <div className="flex items-center gap-6 flex-1">
-          <button
-            aria-label="Open menu"
-            onClick={() => setMenuOpen(true)}
-            className="md:hidden hover:opacity-70 transition-opacity text-primary"
-          >
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-          <nav className="hidden md:flex items-center gap-7">
-            {navLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="font-body text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+          <div className="flex items-center gap-6 flex-1">
+            <button
+              aria-label="Open menu"
+              onClick={() => setMenuOpen(true)}
+              className="md:hidden hover:opacity-70 transition-opacity text-primary"
+            >
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <nav className="hidden md:flex items-center gap-7">
+              {navLinks.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="font-body text-label-md uppercase tracking-wider text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-        <Link
-          href="/"
-          className="font-display text-headline-md tracking-tight text-primary text-center whitespace-nowrap"
-        >
-          O&apos;Circle
-        </Link>
+          <Link
+            href="/"
+            className="font-display text-headline-md tracking-tight text-primary text-center whitespace-nowrap"
+          >
+            O&apos;Circle
+          </Link>
 
-        <div className="flex items-center gap-4 flex-1 justify-end">
-          <button aria-label="Search" className="hover:opacity-70 transition-opacity text-primary">
-            <span className="material-symbols-outlined">search</span>
-          </button>
-          <Link
-            href="/account"
-            aria-label="Account"
-            className="hidden md:inline hover:opacity-70 transition-opacity text-primary"
-          >
-            <span className="material-symbols-outlined">person</span>
-          </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="relative hover:opacity-70 transition-opacity text-primary"
-          >
-            <span className="material-symbols-outlined">shopping_bag</span>
-            <span className="absolute -top-1.5 -right-1.5 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-              2
-            </span>
-          </Link>
+          <div className="flex items-center gap-4 flex-1 justify-end">
+            <button aria-label="Search" className="hover:opacity-70 transition-opacity text-primary">
+              <span className="material-symbols-outlined">search</span>
+            </button>
+            <Link
+              href="/account"
+              aria-label="Account"
+              className="hidden md:inline-flex items-center justify-center hover:opacity-70 transition-opacity text-primary"
+            >
+              {user ? (
+                <span className="w-7 h-7 rounded-full bg-primary-container text-primary text-xs font-bold flex items-center justify-center">
+                  {user.name?.[0]?.toUpperCase() ?? "U"}
+                </span>
+              ) : (
+                <span className="material-symbols-outlined">person</span>
+              )}
+            </Link>
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className="relative hover:opacity-70 transition-opacity text-primary"
+            >
+              <span className="material-symbols-outlined">shopping_bag</span>
+              {itemCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-primary text-on-primary text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {itemCount > 9 ? "9+" : itemCount}
+                </span>
+              )}
+            </Link>
           </div>
         </header>
       </div>
@@ -126,7 +138,7 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
               className="font-display text-headline-md text-on-background hover:text-primary transition-colors"
             >
-              Account
+              {user ? user.name : "Account"}
             </Link>
           </nav>
         </div>

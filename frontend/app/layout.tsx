@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import PaletteSwitcher from "@/components/PaletteSwitcher";
+import { Providers } from "@/components/Providers";
 
 const display = Bodoni_Moda({
   subsets: ["latin"],
@@ -41,11 +42,13 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-background text-on-background font-body text-body-md antialiased">
-        <Header />
-        <main className="pt-[100px] pb-24 md:pb-0 min-h-screen">{children}</main>
-        <Footer />
-        <MobileBottomNav />
-        <PaletteSwitcher />
+        <Providers>
+          <Header />
+          <main className="pt-[100px] pb-24 md:pb-0 min-h-screen">{children}</main>
+          <Footer />
+          <MobileBottomNav />
+          <PaletteSwitcher />
+        </Providers>
       </body>
     </html>
   );

@@ -3,16 +3,20 @@ import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
 import ProductCard from "@/components/ProductCard";
 import Stars from "@/components/Stars";
-import { getProduct, getRelated, products } from "@/lib/products";
+import AddToCartButton from "@/components/AddToCartButton";
+import { serverFetch, toProduct, type ApiProduct } from "@/lib/api";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
-export default function ProductPage({ params }: { params: { slug: string } }) {
-  const product = getProduct(params.slug);
-  if (!product) notFound();
-  const related = getRelated(product.slug);
+export default async function ProductPage({ params }: { params: { slug: string } }) {
+  const [rawProduct, rawRelated] = await Promise.all([
+    serverFetch<ApiProduct>(`/products/${params.slug}`, 60),
+    serverFetch<ApiProduct[]>(`/products/${params.slug}/related`, 120),
+  ]);
+
+  if (!rawProduct) notFound();
+  const product = toProduct(rawProduct);
+  const related = (rawRelated ?? []).map(toProduct);
 
   return (
     <div>
@@ -52,9 +56,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
             </div>
 
             <div className="flex flex-col gap-4">
-              <button className="w-full bg-primary text-on-primary font-body text-label-md uppercase tracking-wider py-4 rounded-full hover:bg-primary-container transition-colors active:scale-[0.99]">
-                Add to Cart · ${product.price.toFixed(2)}
-              </button>
+              <AddToCartButton product={product} />
               <button className="w-full border border-outline text-on-background font-body text-label-md uppercase tracking-wider py-4 rounded-full hover:border-primary hover:text-primary transition-colors">
                 Add to Wishlist
               </button>
@@ -114,7 +116,7 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       </section>
 
       {/* STATS */}
-      {product.stats && (
+      {product.stats && product.stats.length > 0 && (
         <section className="px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm md:py-section-gap-lg">
           <div className="max-w-content mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             <div className="md:col-span-4 space-y-5">
@@ -144,19 +146,21 @@ export default function ProductPage({ params }: { params: { slug: string } }) {
       )}
 
       {/* RELATED */}
-      <section className="bg-surface-container-low px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm md:py-section-gap-lg">
-        <div className="max-w-content mx-auto">
-          <div className="mb-12 space-y-3">
-            <h2 className="font-display text-headline-lg">Complete the Ritual</h2>
-            <p className="font-body text-body-md text-on-surface-variant">Pair it with these member favourites.</p>
+      {related.length > 0 && (
+        <section className="bg-surface-container-low px-container-margin-mobile md:px-container-margin-desktop py-section-gap-sm md:py-section-gap-lg">
+          <div className="max-w-content mx-auto">
+            <div className="mb-12 space-y-3">
+              <h2 className="font-display text-headline-lg">Complete the Ritual</h2>
+              <p className="font-body text-body-md text-on-surface-variant">Pair it with these member favourites.</p>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+              {related.map((p) => (
+                <ProductCard key={p.slug} product={p} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-            {related.map((p) => (
-              <ProductCard key={p.slug} product={p} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

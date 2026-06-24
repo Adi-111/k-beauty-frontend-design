@@ -1,22 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
-import { products, categories } from "@/lib/products";
+import { api, toProduct, type ApiProduct } from "@/lib/api";
+import type { Product } from "@/lib/products";
 
-const sortOptions = ["Featured", "Price: Low to High", "Price: High to Low", "Top Rated"];
+const CATEGORIES = [
+  "All", "Toner Pads", "Sheet Masks", "Serums", "Essences", "Toners",
+  "Cleansers", "Moisturizers", "Suncare", "Eye Care", "Lip Care", "Exfoliators", "Body",
+];
+const sortOptions = [
+  { label: "Featured", value: "featured" },
+  { label: "Price: Low to High", value: "price_asc" },
+  { label: "Price: High to Low", value: "price_desc" },
+  { label: "Top Rated", value: "rating" },
+];
 
 export default function ShopPage() {
   const [active, setActive] = useState("All");
-  const [sort, setSort] = useState("Featured");
+  const [sort, setSort] = useState("featured");
+  const [products, setProducts] = useState<(Product & { id: number })[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  let list = active === "All" ? products : products.filter((p) => p.category === active);
-  list = [...list].sort((a, b) => {
-    if (sort === "Price: Low to High") return a.price - b.price;
-    if (sort === "Price: High to Low") return b.price - a.price;
-    if (sort === "Top Rated") return b.rating - a.rating;
-    return 0;
-  });
+  useEffect(() => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (active !== "All") params.set("category", active);
+    if (sort !== "featured") params.set("sort", sort);
+    api.get<{ data: ApiProduct[]; total: number }>(`/products?${params.toString()}`)
+      .then(res => setProducts((res?.data ?? []).map(toProduct)))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [active, sort]);
 
   return (
     <div>
@@ -36,7 +51,7 @@ export default function ShopPage() {
           {/* filters */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
             <div className="flex flex-wrap gap-3">
-              {categories.map((c) => (
+              {CATEGORIES.map((c) => (
                 <button
                   key={c}
                   onClick={() => setActive(c)}
@@ -58,19 +73,27 @@ export default function ShopPage() {
                 className="font-body text-body-md bg-transparent border-b border-outline pb-1 pr-6 outline-none focus:border-primary cursor-pointer"
               >
                 {sortOptions.map((o) => (
-                  <option key={o}>{o}</option>
+                  <option key={o.value} value={o.value}>{o.label}</option>
                 ))}
               </select>
             </label>
           </div>
 
-          <p className="font-body text-body-md text-on-surface-variant mb-8">{list.length} products</p>
+          <p className="font-body text-body-md text-on-surface-variant mb-8">
+            {loading ? "Loading…" : `${products.length} products`}
+          </p>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
-            {list.map((p) => (
-              <ProductCard key={p.slug} product={p} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+              {products.map((p) => (
+                <ProductCard key={p.slug} product={p} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>
