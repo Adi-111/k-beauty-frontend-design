@@ -4,6 +4,7 @@ import ProductRail from "@/components/ProductRail";
 import HeroBanners from "@/components/HeroBanners";
 import Stars from "@/components/Stars";
 import { serverFetch, toProduct, type ApiProduct, type ApiReview } from "@/lib/api";
+import { essenherbProducts, reviews as localReviews, withId } from "@/lib/products";
 
 const categories = [
   { label: "Sheet Masks", href: "/shop", image: "/products/tile-masks.jpg" },
@@ -23,9 +24,22 @@ export default async function HomePage() {
     serverFetch<{ data: ApiReview[] }>('/reviews?limit=3', 300),
   ]);
 
-  const bestSellers = (bestSellersRaw ?? []).map(toProduct);
-  const trendingNow = (trendingRaw ?? []).map(toProduct);
-  const reviews = reviewsRaw?.data ?? [];
+  const bestSellers = bestSellersRaw?.length
+    ? bestSellersRaw.map(toProduct)
+    : essenherbProducts.filter((p) => p.bestSeller).map(withId);
+  const trendingNow = trendingRaw?.length
+    ? trendingRaw.map(toProduct)
+    : essenherbProducts.filter((p) => p.trending).map(withId);
+  const reviews = reviewsRaw?.data?.length
+    ? reviewsRaw.data
+    : localReviews.slice(0, 3).map((r, i) => ({
+        id: i + 1,
+        authorName: r.name,
+        rating: r.rating,
+        title: r.title,
+        body: r.body,
+        isVerified: r.verified,
+      }));
 
   return (
     <div>

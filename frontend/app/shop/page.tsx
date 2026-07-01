@@ -3,12 +3,19 @@
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { api, toProduct, type ApiProduct } from "@/lib/api";
+import { essenherbProducts as localProducts, withId } from "@/lib/products";
 import type { Product } from "@/lib/products";
 
-const CATEGORIES = [
-  "All", "Toner Pads", "Sheet Masks", "Serums", "Essences", "Toners",
-  "Cleansers", "Moisturizers", "Suncare", "Eye Care", "Lip Care", "Exfoliators", "Body",
-];
+const CATEGORIES = ["All", ...Array.from(new Set(localProducts.map((p) => p.category)))];
+
+function localFallback(active: string, sort: string): (Product & { id: number })[] {
+  let list = localProducts.map(withId);
+  if (active !== "All") list = list.filter((p) => p.category === active);
+  if (sort === "price_asc") list = [...list].sort((a, b) => a.price - b.price);
+  else if (sort === "price_desc") list = [...list].sort((a, b) => b.price - a.price);
+  else if (sort === "rating") list = [...list].sort((a, b) => b.rating - a.rating);
+  return list;
+}
 const sortOptions = [
   { label: "Featured", value: "featured" },
   { label: "Price: Low to High", value: "price_asc" },
@@ -28,8 +35,11 @@ export default function ShopPage() {
     if (active !== "All") params.set("category", active);
     if (sort !== "featured") params.set("sort", sort);
     api.get<{ data: ApiProduct[]; total: number }>(`/products?${params.toString()}`)
-      .then(res => setProducts((res?.data ?? []).map(toProduct)))
-      .catch(() => {})
+      .then(res => {
+        const apiProducts = res?.data ?? [];
+        setProducts(apiProducts.length ? apiProducts.map(toProduct) : localFallback(active, sort));
+      })
+      .catch(() => setProducts(localFallback(active, sort)))
       .finally(() => setLoading(false));
   }, [active, sort]);
 

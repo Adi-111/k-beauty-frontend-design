@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import Stars from "@/components/Stars";
 import AddToCartButton from "@/components/AddToCartButton";
 import { serverFetch, toProduct, type ApiProduct } from "@/lib/api";
+import { getProduct, getEssenherbRelated, withId } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,15 @@ export default async function ProductPage({ params }: { params: { slug: string }
     serverFetch<ApiProduct[]>(`/products/${params.slug}/related`, 120),
   ]);
 
-  if (!rawProduct) notFound();
-  const product = toProduct(rawProduct);
-  const related = (rawRelated ?? []).map(toProduct);
+  // Fall back to the local catalog when the commerce API is unreachable or
+  // doesn't know about this product yet (e.g. this frontend-only demo mode).
+  const localProduct = !rawProduct ? getProduct(params.slug) : undefined;
+  if (!rawProduct && !localProduct) notFound();
+
+  const product = rawProduct ? toProduct(rawProduct) : withId(localProduct!);
+  const related = rawRelated?.length
+    ? rawRelated.map(toProduct)
+    : getEssenherbRelated(params.slug).map(withId);
 
   return (
     <div>

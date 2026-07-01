@@ -198,6 +198,350 @@ const realProducts: Product[] = [
     bestSeller: true,
     trending: true,
   },
+  {
+    slug: "tea-tree-soothing-calming-cream",
+    name: "Tea Tree Soothing in Calming Cream",
+    tagline: "Ranked No.1 in Korea",
+    category: "Moisturizers",
+    collection: "Essenherb",
+    price: 29,
+    compareAt: 35,
+    image: "/products/essenherb/tea-tree-soothing-calming-cream-01.png",
+    gallery: [
+      "/products/essenherb/tea-tree-soothing-calming-cream-01.png",
+      "/products/essenherb/tea-tree-soothing-calming-cream-02.jpg",
+      "/products/essenherb/tea-tree-soothing-calming-cream-03.jpg",
+    ],
+    placeholderVariant: "green",
+    placeholderIcon: "eco",
+    badge: "No.1 in Korea",
+    rating: 4.9,
+    reviewCount: 1876,
+    size: "80ml",
+    shortDesc:
+      "Olive Young's overall No.1 skin care pick — a botanical cream with tea tree leaf, centella asiatica and ceramide that visibly calms redness.",
+    description:
+      "Essenherb's specialty-of-tea-tree cream pairs purifying tea tree leaf with centella asiatica and ceramide to calm reactive, irritated skin. Ranked Overall No.1 on Olive Young (as of Oct 26, 2024) and awarded No.1 Cream at the 2025 Hwahae Awards, it's clinically shown to visibly reduce redness after physical irritation.",
+    ritual:
+      "After toning, scoop a small amount and warm between palms. Press evenly over face and neck, morning and night, focusing on areas prone to redness or irritation.",
+    ingredients: "Tea Tree (Melaleuca Alternifolia) Leaf Extract, Centella Asiatica Extract, Ceramide NP, Panthenol, Allantoin.",
+    keyIngredients: [
+      {
+        name: "Tea Tree Leaf",
+        role: "Purifying",
+        desc: "Essenherb's specialty botanical that helps clear and refresh blemish-prone, congested skin.",
+        icon: "eco",
+      },
+      {
+        name: "Centella Asiatica",
+        role: "Calming",
+        desc: "Soothes redness and conditions reactive, sensitive skin.",
+        icon: "spa",
+      },
+      {
+        name: "Ceramide",
+        role: "Barrier Repair",
+        desc: "Reinforces the skin's moisture barrier to lock in hydration.",
+        icon: "shield",
+      },
+    ],
+    stats: [
+      { value: "No.1", label: "Olive Young overall skin care ranking (Oct 2024)" },
+      { value: "No.1", label: "Hwahae Awards 2025 — Cream category" },
+      { value: "21.09°C", label: "Reduction in skin redness after physical irritation" },
+      { value: "80ml", label: "Full-size jar for daily use" },
+    ],
+    concerns: ["Redness", "Sensitivity", "Acne", "Irritation"],
+    bestSeller: true,
+    trending: true,
+  },
+  {
+    slug: "black-snail-signature-lift-cream",
+    name: "Black Snail Signature Lift Cream",
+    tagline: "Luxury Lifting Care",
+    category: "Moisturizers",
+    collection: "Essenherb",
+    price: 42,
+    compareAt: 48,
+    image: "/products/essenherb/black-snail-lift-cream-01.jpg",
+    gallery: [
+      "/products/essenherb/black-snail-lift-cream-01.jpg",
+      "/products/essenherb/black-snail-lift-cream-02.jpg",
+      "/products/essenherb/black-snail-lift-cream-03.jpg",
+      "/products/essenherb/black-snail-lift-cream-04.jpg",
+    ],
+    placeholderVariant: "dark",
+    placeholderIcon: "diamond",
+    badge: "Luxury",
+    rating: 4.8,
+    reviewCount: 592,
+    size: "50ml",
+    shortDesc:
+      "A rich, lifting cream with 65% black snail mucin — 4x the mucin and 3x the nutrients of regular snail creams — for firm, nourished, smooth skin.",
+    description:
+      "Essenherb's signature luxury cream concentrates 65% black snail secretion filtrate — four times the mucin and three times the nutrients of a regular snail cream — for round-the-clock firming and repair. A rich, cushiony texture melts into skin to raise resilience, boost elasticity and refine texture and pores.",
+    ritual:
+      "As the final step of your evening routine, warm a small amount between palms and press gently into face and neck. Use nightly for best lifting results.",
+    ingredients: "Black Snail Secretion Filtrate (65%), Adenosine, Shea Butter, Ceramide NP, Sodium Hyaluronate.",
+    keyIngredients: [
+      {
+        name: "Black Snail Mucin (65%)",
+        role: "Firming & Repair",
+        desc: "4x more mucin and 3x more nutrients than regular snail mucin, delivering 24-hour hydration and a visibly firmer look.",
+        icon: "bolt",
+      },
+      {
+        name: "Adenosine",
+        role: "Anti-Aging",
+        desc: "Helps firm and smooth the appearance of fine lines and sagging skin.",
+        icon: "diamond",
+      },
+      {
+        name: "Shea Butter",
+        role: "Nourishment",
+        desc: "Deeply nourishes and conditions skin for a soft, supple feel.",
+        icon: "spa",
+      },
+    ],
+    stats: [
+      { value: "65%", label: "Black snail mucin concentration" },
+      { value: "4x", label: "More mucin than regular snail creams" },
+      { value: "3x", label: "More nourishing nutrients" },
+      { value: "24H", label: "Continuous hydration" },
+    ],
+    concerns: ["Firmness", "Fine Lines", "Dryness", "Texture"],
+    trending: true,
+  },
+  {
+    slug: "deep-core-hydra-ampoule",
+    name: "Deep Core Hydra Ampoule",
+    tagline: "10-Layer Hyaluronic Ampoule",
+    category: "Serums",
+    collection: "Essenherb",
+    price: 32,
+    compareAt: 38,
+    image: "/products/essenherb/deep-core-hydra-ampoule-01.png",
+    gallery: [
+      "/products/essenherb/deep-core-hydra-ampoule-01.png",
+      "/products/essenherb/deep-core-hydra-ampoule-02.jpg",
+      "/products/essenherb/deep-core-hydra-ampoule-03.jpg",
+      "/products/essenherb/deep-core-hydra-ampoule-04.jpg",
+      "/products/essenherb/deep-core-hydra-ampoule-05.jpg",
+    ],
+    placeholderVariant: "linen",
+    placeholderIcon: "water_drop",
+    rating: 4.7,
+    reviewCount: 438,
+    size: "150ml",
+    shortDesc:
+      "A lightweight, fast-absorbing 10-layer hyaluronic ampoule for sensitive and dehydrated skin.",
+    description:
+      "Deep Core Hydra Ampoule layers ten weights of hyaluronic acid with panthenol and a plant-based Phyto-Hydrin complex to hydrate sensitive, dehydrated skin without weight or stickiness — locking in lasting moisture while soothing redness and smoothing texture.",
+    ritual:
+      "Step 1 of the Deep Core ritual. Pump once, apply evenly, and pat for absorption. Reapply if layering. Follow with Deep Core Hydra Cream.",
+    ingredients: "Sodium Hyaluronate (10-layer complex), Panthenol, Phyto-Hydrin Complex, Centella Asiatica Extract.",
+    keyIngredients: [
+      {
+        name: "10-Layer Hyaluronic Acid",
+        role: "Hydration",
+        desc: "Multi-weight hyaluronic acid delivers deep hydration across multiple layers of skin.",
+        icon: "water_drop",
+      },
+      {
+        name: "Panthenol",
+        role: "Barrier Repair",
+        desc: "Soothes and strengthens the skin's barrier.",
+        icon: "shield",
+      },
+      {
+        name: "Phyto-Hydrin Complex",
+        role: "Suppleness",
+        desc: "A plant-based complex that leaves skin soft and supple.",
+        icon: "eco",
+      },
+    ],
+    concerns: ["Hydration", "Sensitivity", "Dryness", "Redness"],
+  },
+  {
+    slug: "deep-core-hydra-cream",
+    name: "Deep Core Hydra Cream",
+    tagline: "Hydration Lock & Skin Barrier Care",
+    category: "Moisturizers",
+    collection: "Essenherb",
+    price: 34,
+    compareAt: 40,
+    image: "/products/essenherb/deep-core-hydra-cream-01.jpg",
+    gallery: [
+      "/products/essenherb/deep-core-hydra-cream-01.jpg",
+      "/products/essenherb/deep-core-hydra-cream-02.jpg",
+      "/products/essenherb/deep-core-hydra-cream-03.jpg",
+    ],
+    placeholderVariant: "linen",
+    placeholderIcon: "spa",
+    rating: 4.7,
+    reviewCount: 401,
+    size: "100ml",
+    shortDesc:
+      "Deep, lasting hydration for sensitive and dry skin, with vegan Phyto Mucin and a 10-layer hyaluronic complex.",
+    description:
+      "The second step of the Deep Core ritual, this cream locks in the hydration laid down by the Hydra Ampoule with vegan, plant-derived Phyto Mucin and a 10-layer hyaluronic complex — for lasting moisture and a stronger, calmer skin barrier.",
+    ritual:
+      "Step 2 of the Deep Core ritual. Pump once, apply evenly, and pat for absorption after the Hydra Ampoule.",
+    ingredients: "Phyto Mucin (Plant-Derived), Sodium Hyaluronate (10-layer complex), Panthenol, Ceramide NP.",
+    keyIngredients: [
+      {
+        name: "Phyto Mucin",
+        role: "Intense Hydration",
+        desc: "A vegan, plant-derived mucin that delivers intense hydration without animal-derived ingredients.",
+        icon: "eco",
+      },
+      {
+        name: "10-Layer Hyaluronic Acid",
+        role: "Hydration",
+        desc: "Multi-weight hyaluronic acid for deep, lasting moisture.",
+        icon: "water_drop",
+      },
+      {
+        name: "Panthenol",
+        role: "Barrier Repair",
+        desc: "Soothes and strengthens the skin's barrier.",
+        icon: "shield",
+      },
+    ],
+    concerns: ["Dryness", "Sensitivity", "Hydration", "Texture"],
+  },
+  {
+    slug: "muco-ritual-ampoule",
+    name: "Muco Ritual Ampoule",
+    tagline: "Get an Instant Calm",
+    category: "Serums",
+    collection: "Essenherb",
+    price: 30,
+    compareAt: 36,
+    image: "/products/essenherb/muco-ritual-ampoule-01.png",
+    gallery: [
+      "/products/essenherb/muco-ritual-ampoule-01.png",
+      "/products/essenherb/muco-ritual-ampoule-02.jpg",
+      "/products/essenherb/muco-ritual-ampoule-03.jpg",
+    ],
+    placeholderVariant: "green",
+    placeholderIcon: "healing",
+    badge: "Trending",
+    rating: 4.7,
+    reviewCount: 356,
+    size: "50ml",
+    shortDesc:
+      "An instantly calming mucin ampoule with high-purity aloe polysaccharides for lightweight, non-sticky hydration.",
+    description:
+      "Muco Ritual Ampoule pairs a repairing mucin complex with Essenherb's own high-purity aloe polysaccharides — purified far beyond a basic aloe extract — for instant redness relief and lightweight, non-sticky hydration.",
+    ritual:
+      "After toning, smooth a thin layer over face and neck. Use morning and night for instant calming relief.",
+    ingredients: "Snail/Mucin Complex, Essenherb Aloe Polysaccharides, Centella Asiatica Extract, Panthenol.",
+    keyIngredients: [
+      {
+        name: "Mucin Complex",
+        role: "Repair & Soothing",
+        desc: "Calms redness and helps repair a compromised skin barrier on contact.",
+        icon: "healing",
+      },
+      {
+        name: "Essenherb Aloe Polysaccharides",
+        role: "Deep Hydration",
+        desc: "High-purity, purified aloe — beyond a basic extract — for intensive soothing and premium hydration.",
+        icon: "water_drop",
+      },
+    ],
+    concerns: ["Redness", "Sensitivity", "Texture"],
+    trending: true,
+  },
+  {
+    slug: "quick-deep-bubble-essence",
+    name: "Quick and Deep Bubble Essence",
+    tagline: "Hydrate, Soothe, and Glow",
+    category: "Essences",
+    collection: "Essenherb",
+    price: 26,
+    compareAt: 31,
+    image: "/products/essenherb/quick-deep-bubble-essence-01.png",
+    gallery: [
+      "/products/essenherb/quick-deep-bubble-essence-01.png",
+      "/products/essenherb/quick-deep-bubble-essence-02.jpg",
+      "/products/essenherb/quick-deep-bubble-essence-03.jpg",
+    ],
+    placeholderVariant: "stone",
+    placeholderIcon: "bubble_chart",
+    rating: 4.6,
+    reviewCount: 289,
+    size: "120ml",
+    shortDesc:
+      "A fine-bubble whip essence that delivers instant moisture with a no-mess, gentle application.",
+    description:
+      "Quick and Deep Bubble Essence releases as a fine bubble whip that buffers instantly into skin — no dragging, no stickiness, no mess. It boosts moisture immediately, smooths flaky texture for a flake-free makeup base, and is gentle enough for reactive skin.",
+    ritual:
+      "Pump 1–2 times after cleansing to release bubbles. Apply gently to the face. Tap lightly until fully absorbed. Layer for a deeper, glowing finish.",
+    ingredients: "Aqua, Butylene Glycol, Sodium Hyaluronate, Panthenol, Centella Asiatica Extract.",
+    keyIngredients: [
+      {
+        name: "Bubble-Whip Texture",
+        role: "Instant Moisture",
+        desc: "Fine bubbles buffer the essence into skin instantly, without pulling or dragging.",
+        icon: "bubble_chart",
+      },
+      {
+        name: "Gentle, Non-Irritating Formula",
+        role: "Sensitive-Skin Friendly",
+        desc: "Absorbs softly with no mess or stickiness, even on reactive skin.",
+        icon: "spa",
+      },
+    ],
+    concerns: ["Dryness", "Texture", "Sensitivity"],
+    isNew: true,
+  },
+  {
+    slug: "day-to-night-program",
+    name: "Day to Night Program",
+    tagline: "Day & Night Care, Simplified",
+    category: "Sets",
+    collection: "Essenherb",
+    price: 44,
+    compareAt: 54,
+    image: "/products/essenherb/day-to-night-program-01.png",
+    gallery: [
+      "/products/essenherb/day-to-night-program-01.png",
+      "/products/essenherb/day-to-night-program-02.jpg",
+      "/products/essenherb/day-to-night-program-03.jpg",
+      "/products/essenherb/day-to-night-program-04.jpg",
+    ],
+    placeholderVariant: "linen",
+    placeholderIcon: "wb_twighlight",
+    badge: "Best Value",
+    rating: 4.8,
+    reviewCount: 214,
+    size: "2 × 30ml (Day Cream + Night Cream)",
+    shortDesc:
+      "A duo routine set — Bounce It Day Cream and Float It Night Cream — for personalized, healthy, balanced skin from day to night.",
+    description:
+      "Day to Night Program simplifies personalized skincare into one 30ml × 2 set: Bounce It Day Cream to hydrate, refine and brighten, and Float It Night Cream to firm, tighten and deeply replenish overnight.",
+    ritual:
+      "AM: Apply Bounce It Day Cream as the last step of your morning routine. PM: Apply Float It Night Cream as the last step before bed.",
+    ingredients: "Day: Niacinamide, Panthenol, Botanical Extracts. Night: Adenosine, Peptide Complex, Ceramide NP.",
+    keyIngredients: [
+      {
+        name: "Bounce It Day Cream",
+        role: "Skin Boosting & Barrier Defence",
+        desc: "Hydrates skin for 12 hours, refines pores and smooths texture, reduces excess oil, and brightens tone.",
+        icon: "wb_sunny",
+      },
+      {
+        name: "Float It Night Cream",
+        role: "Skin Relaxing & Core Tightening",
+        desc: "Firms sagging skin for a lifted look, boosts skin density and resilience, and delivers deep overnight hydration.",
+        icon: "bedtime",
+      },
+    ],
+    concerns: ["Firmness", "Hydration", "Dullness", "Fine Lines"],
+    isNew: true,
+  },
 ];
 
 const fillerProducts: Product[] = [
@@ -231,6 +575,10 @@ const fillerProducts: Product[] = [
 
 export const products: Product[] = [...realProducts, ...fillerProducts];
 
+// The curated, real-photo catalog (no filler/placeholder products) — used
+// wherever the site falls back to local data instead of the commerce API.
+export const essenherbProducts: Product[] = products.filter((p) => p.collection === "Essenherb");
+
 export const categories = [
   "All",
   "Toner Pads",
@@ -245,6 +593,7 @@ export const categories = [
   "Lip Care",
   "Exfoliators",
   "Body",
+  "Sets",
 ];
 
 export const shopByCategory = [
@@ -278,6 +627,22 @@ export function getRelated(slug: string, limit = 4) {
   const sameCat = products.filter((p) => p.slug !== slug && p.category === me?.category);
   const rest = products.filter((p) => p.slug !== slug && p.category !== me?.category);
   return [...sameCat, ...rest].slice(0, limit);
+}
+
+// Same as getRelated, but scoped to the curated Essenherb catalog only —
+// avoids pulling in filler/placeholder products when falling back to local data.
+export function getEssenherbRelated(slug: string, limit = 4) {
+  const me = essenherbProducts.find((p) => p.slug === slug);
+  const sameCat = essenherbProducts.filter((p) => p.slug !== slug && p.category === me?.category);
+  const rest = essenherbProducts.filter((p) => p.slug !== slug && p.category !== me?.category);
+  return [...sameCat, ...rest].slice(0, limit);
+}
+
+// Assigns a stable synthetic id (based on catalog position) so local/offline
+// data can be used wherever the API-backed shape `Product & { id: number }` is expected.
+export function withId(p: Product): Product & { id: number } {
+  const id = products.findIndex((x) => x.slug === p.slug) + 1;
+  return { ...p, id };
 }
 
 export const byCategory = (cat: string, limit = 12) =>
