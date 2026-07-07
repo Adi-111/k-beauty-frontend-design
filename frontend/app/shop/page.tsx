@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import { api, toProduct, type ApiProduct } from "@/lib/api";
-import { essenherbProducts as localProducts, withId } from "@/lib/products";
+import { curatedProducts as localProducts, withId } from "@/lib/products";
 import type { Product } from "@/lib/products";
 
 const CATEGORIES = ["All", ...Array.from(new Set(localProducts.map((p) => p.category)))];

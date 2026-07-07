@@ -5,7 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import Stars from "@/components/Stars";
 import AddToCartButton from "@/components/AddToCartButton";
 import { serverFetch, toProduct, type ApiProduct } from "@/lib/api";
-import { getProduct, getEssenherbRelated, withId } from "@/lib/products";
+import { getProduct, getCuratedRelated, withId } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
   const product = rawProduct ? toProduct(rawProduct) : withId(localProduct!);
   const related = rawRelated?.length
     ? rawRelated.map(toProduct)
-    : getEssenherbRelated(params.slug).map(withId);
+    : getCuratedRelated(params.slug).map(withId);
 
   return (
     <div>

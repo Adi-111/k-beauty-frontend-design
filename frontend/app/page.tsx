@@ -4,7 +4,7 @@ import ProductRail from "@/components/ProductRail";
 import HeroBanners from "@/components/HeroBanners";
 import Stars from "@/components/Stars";
 import { serverFetch, toProduct, type ApiProduct, type ApiReview } from "@/lib/api";
-import { essenherbProducts, reviews as localReviews, withId } from "@/lib/products";
+import { curatedProducts, reviews as localReviews, withId } from "@/lib/products";
 
 const categories = [
   { label: "Sheet Masks", href: "/shop", image: "/products/tile-masks.jpg" },
@@ -26,10 +26,10 @@ export default async function HomePage() {
 
   const bestSellers = bestSellersRaw?.length
     ? bestSellersRaw.map(toProduct)
-    : essenherbProducts.filter((p) => p.bestSeller).map(withId);
+    : curatedProducts.filter((p) => p.bestSeller).map(withId);
   const trendingNow = trendingRaw?.length
     ? trendingRaw.map(toProduct)
-    : essenherbProducts.filter((p) => p.trending).map(withId);
+    : curatedProducts.filter((p) => p.trending).map(withId);
   const reviews = reviewsRaw?.data?.length
     ? reviewsRaw.data
     : localReviews.slice(0, 3).map((r, i) => ({
